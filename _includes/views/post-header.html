@@ -9,7 +9,7 @@
     </time>
 
     {%- if page.author -%}
-    <span class="post-author left-vsplit"><i class="fa fa-pencil"></i> {{ page.author | escape }}</span>
+    <span class="post-author left-vsplit"><i class="fa fa-pencil"></i><a href="{{ page.author_url }}" style="color:#777777">{{ page.author | escape }}</a></span>
     {%- endif -%}
 
     {% assign article = page.content %}
