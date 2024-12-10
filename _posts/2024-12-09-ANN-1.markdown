@@ -7,7 +7,7 @@ author: yunha
 author_url: "https://github.com/NaA-hwang"
 ---
 
-![앨런 튜링 - Can machines think?](/assets/2024-12-09-ANN-1/앨런튜링-can-machines-think.png)
+![앨런 튜링 - Can machines think?](/assets/images/posts/2024-12-09-ANN-1/앨런튜링-can-machines-think.png)
 
 인간은 오랜 세월 동안 기계가 인간처럼 사고할 수 있을지 호기심을 가져왔습니다. 1950년, 엘런 튜링(Alan Turing)은 자신의 논문 <Computer Machinery and Intelligence>에서 “Can machines think?”라는 질문을 던지며, 기계의 지능에 대한 논의를 본격적으로 시작했습니다.
 
@@ -20,13 +20,13 @@ author_url: "https://github.com/NaA-hwang"
 
 인간의 지능을 모방하기 위한 시도는, 인간의 생물학적인 뉴런을 모방한 논리적 모델로부터 시작했습니다. 1943년, 워렌 맥컬록(Warren McCulloch)과 월터 피츠(Walter Pitts)는 "*A Logical Calculus of Ideas Immanent in Nervous Activity*"라는 논문을 발표하고, 뉴런의 동작을 이진 논리로 설명하는 M-P 뉴런을 소개했습니다.
 
-![생물학적 뉴런의 구조](/assets/2024-12-09-ANN-1/생물학적-뉴런.png){:width="400"}
+![생물학적 뉴런의 구조](/assets/images/posts/2024-12-09-ANN-1/생물학적-뉴런.png){:width="400"}
 
 [이미지 출처](https://namu.wiki/w/뉴런)
 
 인간의 뇌는 수백억 개의 뉴런으로 이루어져 있고, 각 뉴런은 신호를 처리한 뒤 다른 뉴런으로 신호를 전달합니다. 뉴런의 수상돌기에서 신호를 받아들이면, 신경세포체에서 받은 신호를 종합하고 처리하죠. 계산 결과가 특정 임곗값을 초과하면 축삭 말단 부근의 시냅스를 통해 다음 뉴런으로 신호가 전달되며, 뇌 전체에서 이런 과정을 반복해 정보를 처리합니다. 
 
-![M-P 뉴런](/assets/2024-12-09-ANN-1/M-P-뉴런.png)
+![M-P 뉴런](/assets/images/posts/2024-12-09-ANN-1/M-P-뉴런.png)
 
 [이미지 출처](https://medium.com/@siddharthshah2601/mcculloch-pitts-neuron-a-computational-model-of-biological-neuron-ce57239a951e)
 
@@ -40,13 +40,13 @@ author_url: "https://github.com/NaA-hwang"
 
 인공지능의 선구자로 불리는 미국의 전산학자 존 매카시는 1956년, 다트머스 대학 학회(Dartmouth Conference)를 개최하고 ‘인공지능’이라는 용어를 처음으로 사용했습니다. 인공지능(Artificial Intelligence, AI)을 ‘고도의 지능을 가진 컴퓨터 디바이스를 만들기 위한 과학과 공학’으로 정의했는데, 이때를 시작으로 관련 연구들은 ‘인공지능’이라는 이름을 내걸고 더욱 활발해졌습니다. 머지않아 1958년, 최초의 인공 신경망인 퍼셉트론(Perceptron)이 등장합니다.
 
-![퍼셉트론](/assets/2024-12-09-ANN-1/perceptrons.png)
+![퍼셉트론](/assets/images/posts/2024-12-09-ANN-1/perceptrons.png)
 
 [이미지 출처](https://pub.aimind.so/perceptron-101-the-building-blocks-of-a-neural-network-496f6b9b3826)
 
 미국의 심리학자 프랑크 로젠블랫(Frank Rosenblatt)은 맥컬록-피츠의 모델과 헵의 이론에서 영감을 얻어 가중치와 학습의 개념을 추가한 퍼셉트론을 개발했습니다. 입력값마다 각각 입력의 중요도를 나타내는 가중치를 곱한 후 모두 합해 활성화 함수에 전달합니다. 활성화 함수에서 출력되는 결과를 보고 앞서 곱해진 가중치(weights)를 조정해 출력된 예측값과 정답의 오차를 줄이는 학습 알고리즘이 포함된 것이죠. 
 
-![계단 함수](/assets/2024-12-09-ANN-1/계단함수.png)
+![계단 함수](/assets/images/posts/2024-12-09-ANN-1/계단함수.png){:width="400"}
 
 [이미지 출처](https://pub.aimind.so/perceptron-101-the-building-blocks-of-a-neural-network-496f6b9b3826)
 
@@ -58,13 +58,13 @@ author_url: "https://github.com/NaA-hwang"
 
 퍼셉트론이 등장하면서 인공지능에 대한 연구는 부흥기를 맞이했지만, 그 기간은 그리 길게 이어지지 못했습니다. 1969년, 미국의 컴퓨터과학자 마빈 리 민스키(Marvin Lee Minsky)가 저서 <Perceptrons>에서 퍼셉트론은 XOR 문제와 같은 비선형 문제를 해결할 수 없다는 한계를 지적했기 때문입니다.
 
-![퍼셉트론의 층](/assets/2024-12-09-ANN-1/ANN-diagrams_퍼셉트론의%20층.png)
+![퍼셉트론의 층](/assets/images/posts/2024-12-09-ANN-1/ANN-diagrams_퍼셉트론의%20층.png)
 
 초기의 퍼셉트론은 값을 입력받는 입력층과, 출력값을 결정하는 출력층까지 총 두 단계로만 이루어진 단층 퍼셉트론이었습니다. 이러한 단층 구조는 입력값을 선형 결합해서 단일한 출력만을 낼 수 있기 때문에, 비선형 경계를 표현하는 데에 한계가 있습니다. 
 
 대표적인 비선형 문제 중 하나인 XOR 회로를 그림으로 나타내면 아래와 같습니다.
 
-![논리회로](/assets/2024-12-09-ANN-1/논리회로.png)
+![논리회로](/assets/images/posts/2024-12-09-ANN-1/논리회로.png)
 
 [이미지 출처](https://pyimagesearch.com/2021/05/06/implementing-the-perceptron-neural-network-with-python/)
 
@@ -75,7 +75,7 @@ author_url: "https://github.com/NaA-hwang"
 
 퍼셉트론이 단층 신경망이라서 위와 같은 문제를 갖는 것이라면, 여러 층을 갖는 퍼셉트론은 이 문제를 해결할 수 있을까요?
 
-![다층신경망](/assets/2024-12-09-ANN-1/ANN-diagrams_다층신경망.png)
+![다층신경망](/assets/images/posts/2024-12-09-ANN-1/ANN-diagrams_다층신경망.png)
 
 다층 신경망은 단층 신경망에 하나 이상의 은닉층이 추가된 인공 신경망입니다. 은닉층이 2개 이상이면 심층 신경망(Deep Neural Network, DNN)이라고도 합니다. 각 층은 그림에서 동그라미로 표현된 노드로 구성되어 있습니다. 여기서 노드(node)는 앞서 계속 다뤄온 인공 뉴런을 의미합니다. 앞으로 인공 신경망을 구성하고 있는 인공 뉴런을 노드라고 표기하겠습니다. 입력층의 노드에는 입력 데이터가 들어있지만, 나머지 층의 노드에서는 각자 정해진 역할을 수행합니다. 그 역할의 내용은 다음과 같습니다.
 
@@ -87,7 +87,7 @@ author_url: "https://github.com/NaA-hwang"
 
 오랜 시간 동안 많은 연구자들이 노력했지만, 다층 신경망을 구현하는 것은 어려웠습니다. 은닉층에서 도출되는 각 노드의 출력값에는 오차를 측정할 정답이 없어, 은닉층의 가중치를 조정할 기준이 없었기 때문입니다. 그러나 1986년, 영국의 컴퓨터 과학자 제프리 힌튼(Geoffrey Hinton)이 다른 연구자들과 함께 다층 신경망을 학습시킬 수 있는 오류 역전파 알고리즘을 고안해 냈습니다. 
 
-![오류 역전파 알고리즘](/assets/2024-12-09-ANN-1/ANN-diagrams_오류%20역전파%20알고리즘.png)
+![오류 역전파 알고리즘](/assets/images/posts/2024-12-09-ANN-1/ANN-diagrams_오류%20역전파%20알고리즘.png)
 
 정답이 있는 출력층에서 오차를 계산해 낼 수 있고, 이 오차(오류)를 출력층에서 입력층 방향으로 역으로 전파시키면서 은닉층의 가중치들을 재조정할 수 있게 된 것입니다. (역전파 알고리즘에 대해서는 이후 ANN의 학습에서 더 자세히 알아보겠습니다.)오류 역전파 알고리즘으로 다층 신경망을 구현해 내면서, 이후에는 순환 신경망(RNN)과 합성곱 신경망(CNN)과 같은 구조들이 등장하여 시계열 데이터와 이미지 데이터를 처리할 수 있게 되었습니다. 
 
@@ -96,7 +96,7 @@ author_url: "https://github.com/NaA-hwang"
 
 다층 신경망은 현대 인공 신경망의 기본 구조로 자리 잡았습니다. 현대 인공 신경망의 중요한 구성 요소 중 하나인 은닉층에 대해 조금 더 자세히 알아보겠습니다. 은닉층의 각 노드에서는 다음의 과정들이 순서대로 진행됩니다.
 
-![은닉층 동작](/assets/2024-12-09-ANN-1/ANN-diagrams_은닉층%20동작.png)
+![은닉층 동작](/assets/images/posts/2024-12-09-ANN-1/ANN-diagrams_은닉층%20동작.png)
 
 1. 입력 데이터와 가중치(Weights)의 곱 계산
 2. 계산한 곱과 편향(Bias)을 더함
@@ -106,27 +106,27 @@ author_url: "https://github.com/NaA-hwang"
 
 > 1) 입력 데이터와 가중치(Weights)의 곱 계산
 
-![은닉층 동작 1](/assets/2024-12-09-ANN-1/ANN-diagrams_은닉층%20동작%201.png)
+![은닉층 동작 1](/assets/images/posts/2024-12-09-ANN-1/ANN-diagrams_은닉층%20동작%201.png)
 
 노드로 입력 데이터들이 전달되면, 각 입력값에 맞는 가중치가 곱해집니다. 가중치는 각 입력값에 대한 중요도를 나타내는 숫자입니다. 따라서 입력값에 가중치를 곱함으로써 중요한 값은 비중을 키우고, 그렇지 않은 값은 비중을 줄일 수 있습니다.
 
 > 2) 계산한 곱과 편향(Bias)을 더함
 
-![은닉층 동작 2](/assets/2024-12-09-ANN-1/ANN-diagrams_은닉층%20동작%202.png)
+![은닉층 동작 2](/assets/images/posts/2024-12-09-ANN-1/ANN-diagrams_은닉층%20동작%202.png)
 
 앞서 계산한 곱에 편향을 더해, 활성화 함수에 전달할 값을 결정하는 선형 변환 식 ($z=w_1x_1+w_2x_2+...+w_nx_n+b$)을 완성합니다. 입력값과 가중치의 곱에 편향을 더함으로써, 입력값이 0일 때도 유의미한 출력을 만들어낼 수 있도록 값을 조정합니다.
 
 > 3) 활성화 함수(Activation Function) 적용 결과 출력
 
-![은닉층 동작 3](/assets/2024-12-09-ANN-1/ANN-diagrams_은닉층%20동작%203.png)
+![은닉층 동작 3](/assets/images/posts/2024-12-09-ANN-1/ANN-diagrams_은닉층%20동작%203.png)
 
 선형 변환된 값을 해당 노드의 출력값으로 변환하기 위해 활성화 함수를 사용합니다. 활성화 함수를 사용하는 주된 목적은 출력값에 비선형성을 추가하기 위함입니다. 선형 변환만을 사용한 신경망은 직선으로 데이터를 표현할 수 있는 경우에만 한정되어 있습니다. 선형 변환을 아무리 많이 결합해 봤자, 여러 층의 선형 변환은 결국 하나의 선형 모델과 동일한 결과를 내기 때문입니다. 하지만 복잡한 문제는 직선이 아닌, 보다 복잡한 모양의 경계(곡선, 면 등)가 필요한 경우가 많습니다. 활성화 함수는 이러한 비선형 경계를 만들 수 있도록 신경망에 비선형성을 도입합니다.
 
-![활성화 함수의 비선형성](/assets/2024-12-09-ANN-1/ANN-diagrams_활성화%20함수의%20비선형성.png)
+![활성화 함수의 비선형성](/assets/images/posts/2024-12-09-ANN-1/ANN-diagrams_활성화%20함수의%20비선형성.png)
 
 대표적인 활성화 함수로는 시그모이드 함수가 있습니다. 
 
-![시그모이드 함수](/assets/2024-12-09-ANN-1/시그모이드%20함수.png)
+![시그모이드 함수](/assets/images/posts/2024-12-09-ANN-1/시그모이드%20함수.png){:width="500"}
 
 [이미지 출처](https://towardsdatascience.com/derivative-of-the-sigmoid-function-536880cf918e)
 
