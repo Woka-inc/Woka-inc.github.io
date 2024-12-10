@@ -3,13 +3,15 @@ layout: post
 title:  "ANN의 발전과 구조"
 date:   2024-12-09
 tags:   [deep-learning, ANN, 인공신경망, 퍼셉트론]
+category:   "Deep Learning 기초"
+excerpt_image: /assets/images/posts/2024-12-09-ANN-1/ANN-diagrams_은닉층%20동작.png
 author: yunha
 author_url: "https://github.com/NaA-hwang"
 ---
 
 ![앨런 튜링 - Can machines think?](/assets/images/posts/2024-12-09-ANN-1/앨런튜링-can-machines-think.png)
 
-인간은 오랜 세월 동안 기계가 인간처럼 사고할 수 있을지 호기심을 가져왔습니다. 1950년, 엘런 튜링(Alan Turing)은 자신의 논문 <Computer Machinery and Intelligence>에서 “Can machines think?”라는 질문을 던지며, 기계의 지능에 대한 논의를 본격적으로 시작했습니다.
+인간은 오랜 세월 동안 기계가 인간처럼 사고할 수 있을지 호기심을 가져왔습니다. 1950년, 엘런 튜링(Alan Turing)은 자신의 논문 \<_Computer Machinery and Intelligence_\>에서 “Can machines think?”라는 질문을 던지며, 기계의 지능에 대한 논의를 본격적으로 시작했습니다.
 
 그는 이 질문에 답하기 위해 인간과 기계의 대화를 통해 기계의 지능을 평가하는 튜링 테스트를 제안했는데, 이러한 호기심과 도전은 인간의 지능을 모방하고 이를 넘어서는 시스템을 설계하기 위한 다양한 시도로 이어졌습니다.
 
@@ -18,7 +20,7 @@ author_url: "https://github.com/NaA-hwang"
 <br/>
 ## 인간의 뉴런을 기계적으로 구현한 첫 모델, M-P 뉴런
 
-인간의 지능을 모방하기 위한 시도는, 인간의 생물학적인 뉴런을 모방한 논리적 모델로부터 시작했습니다. 1943년, 워렌 맥컬록(Warren McCulloch)과 월터 피츠(Walter Pitts)는 "*A Logical Calculus of Ideas Immanent in Nervous Activity*"라는 논문을 발표하고, 뉴런의 동작을 이진 논리로 설명하는 M-P 뉴런을 소개했습니다.
+인간의 지능을 모방하기 위한 시도는, 인간의 생물학적인 뉴런을 모방한 논리적 모델로부터 시작했습니다. 1943년, 워렌 맥컬록(Warren McCulloch)과 월터 피츠(Walter Pitts)는 \<_A Logical Calculus of Ideas Immanent in Nervous Activity_\>라는 논문을 발표하고, 뉴런의 동작을 이진 논리로 설명하는 M-P 뉴런을 소개했습니다.
 
 ![생물학적 뉴런의 구조](/assets/images/posts/2024-12-09-ANN-1/생물학적-뉴런.png){:width="400"}
 
