@@ -20,12 +20,14 @@ GEM
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0)
     eventmachine (1.2.7)
+    ffi (1.17.0)
     ffi (1.17.0-arm64-darwin)
     ffi (1.17.0-x86_64-darwin)
     forwardable-extended (2.6.0)
     gemoji (3.0.1)
     google-protobuf (3.25.5-arm64-darwin)
     google-protobuf (3.25.5-x86_64-darwin)
+    google-protobuf (3.25.5-x86_64-linux)
     http_parser.rb (0.8.0)
     i18n (1.14.6)
       concurrent-ruby (~> 1.0)
@@ -74,6 +76,8 @@ GEM
       racc (~> 1.4)
     nokogiri (1.17.0-x86_64-darwin)
       racc (~> 1.4)
+    nokogiri (1.17.0-x86_64-linux)
+      racc (~> 1.4)
     pathutil (0.16.2)
       forwardable-extended (~> 2.6)
     public_suffix (6.0.1)
@@ -86,9 +90,11 @@ GEM
     rexml (3.3.9)
     rouge (4.5.1)
     safe_yaml (1.0.5)
-    sass-embedded (1.77.5-arm64-darwin)
+    sass-embedded (1.77.0-arm64-darwin)
       google-protobuf (>= 3.25, < 5.0)
-    sass-embedded (1.77.5-x86_64-darwin)
+    sass-embedded (1.77.0-x86_64-darwin)
+      google-protobuf (>= 3.25, < 5.0)
+    sass-embedded (1.77.0-x86_64-linux)
       google-protobuf (>= 3.25, < 5.0)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
@@ -98,6 +104,7 @@ GEM
 PLATFORMS
   arm64-darwin
   x86_64-darwin
+  x86_64-linux
 
 DEPENDENCIES
   bundler (>= 1.6, < 3.0)
