@@ -96,7 +96,7 @@ html {
   margin-right: 50px;
 
   .site-brand-inner {
-    @include relative-font-size(1.125);
+    @include relative-font-size(1.5);
     font-weight: $base-font-weight;
     letter-spacing: -1px;
     transition: 0.1s filter color;
@@ -107,8 +107,9 @@ html {
 
     .site-favicon {
       display: inline-block;
-      height: divide($header-height, 1.5);
+      height: divide($header-height, 2);
       margin-right: 5px;
+      margin-top: -10px;
     }
   }
 }
