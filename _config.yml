@@ -24,6 +24,8 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
+remote_theme: jeffreytse/jekyll-theme-yat
+
 title: Woka 기술 블로그
 email: chioh@woka.kr
 author: Woka
