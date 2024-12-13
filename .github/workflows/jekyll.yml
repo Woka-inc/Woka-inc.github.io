@@ -11,6 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1' # Ruby 3.1 이상 명시
+          bundler-cache: true # 캐시 활성화
+
       # Use GitHub Actions' cache to cache dependencies on servers
       - uses: actions/cache@v1
         with:
