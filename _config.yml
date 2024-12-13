@@ -49,7 +49,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   DX를 넘어 AX로 가는 길
 
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. https://example.com
+url: "Woka-inc.github.io" # the base hostname & protocol for your site, e.g. https://example.com
 favicon: "/assets/images/favicon.ico" # the favicon for your site
 
 # Yat date format
@@ -120,7 +120,7 @@ yat:
 # greatgold: #f2cb05
 # greenblue: #389092
 #
-# brand_color: orangered
+brand_color: "#ff6c00"
 #
 # Custom color as below:
 # brand_color: "#1a8e42"
