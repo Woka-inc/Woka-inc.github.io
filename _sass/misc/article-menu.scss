@@ -16,7 +16,7 @@
   .post-menu-content {
     ul {
       border-left: 1px solid #e9ecef;
-      $indent: divide($base-font-size, 4);
+      $indent: divide($base-font-size, 3);
       $active-bgcolor: #ecebec;
 
       @for $i from 2 to 7 {
@@ -29,7 +29,7 @@
 
       a {
         display: flex;
-        padding: 2px 8px;
+        padding: 4px 8px;
         color: darken($text-color, 10%);
 
         * {
