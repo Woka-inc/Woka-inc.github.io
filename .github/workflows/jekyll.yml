@@ -11,6 +11,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1' # Ruby 3.1 버전 사용
+
+      - name: Install Dependencies
+        run: |
+          gem install bundler
+          bundle install
+
       # Jekyll 사이트 빌드 및 배포
       - uses: jeffreytse/jekyll-deploy-action@v0.5.1
         with:
