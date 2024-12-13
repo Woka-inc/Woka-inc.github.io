@@ -1,9 +1,9 @@
-name: Github Pages
+name: Deploy Jekyll site to Pages
 
 on:
   push:
     branches:
-      - main  # Here source code branch is `master`, it could be other branch
+      - main
 
 jobs:
   build_and_deploy:
@@ -11,29 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.1' # Ruby 3.1 이상 명시
-          bundler-cache: true # 캐시 활성화
-
-      # Use GitHub Actions' cache to cache dependencies on servers
-      - uses: actions/cache@v1
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-
-      # Use GitHub Deploy Action to build and deploy to Github
+      # Jekyll 사이트 빌드 및 배포
       - uses: jeffreytse/jekyll-deploy-action@v0.5.1
         with:
           provider: 'github'
-          token: ${{ secrets.GITHUB_TOKEN }} # It's your Personal Access Token(PAT)
-          repository: ''             # Default is current repository
-          branch: 'gh-pages'         # Default is gh-pages for github provider
-          jekyll_src: './'           # Default is root directory
-          jekyll_cfg: '_config.yml'  # Default is _config.yml
-          jekyll_baseurl: '/jekyll-theme-yat'  # Default is empty
-          cname: ''                  # Default is to not use a cname
-          actor: ''                  # Default is the GITHUB_ACTOR
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: 'gh-pages'
+          jekyll_src: './'
