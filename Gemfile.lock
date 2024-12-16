@@ -327,6 +327,3 @@ DEPENDENCIES
   github-pages
   jekyll-theme-yat!
   rake (>= 12.0, < 13.0)
-
-BUNDLED WITH
-   2.5.23
