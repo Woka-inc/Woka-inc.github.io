@@ -25,7 +25,7 @@
 # in the templates via {{ site.myvariable }}.
 
 # theme: owner/name --> Don't forget to remove/comment the gem-based theme option
-remote_theme: "jeffreytse/jekyll-theme-yat"
+remote_theme: "jeffreytse/jekyll-theme-yat@v1.10.0"
 
 title: Woka 기술 블로그
 email: chioh@woka.kr
