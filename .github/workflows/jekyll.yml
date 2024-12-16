@@ -22,7 +22,7 @@ jobs:
           bundle install
 
       # Jekyll 사이트 빌드 및 배포
-      - uses: jeffreytse/jekyll-deploy-action@v0.5.1
+      - uses: jeffreytse/jekyll-deploy-action@v0.6.0
         with:
           provider: 'github'
           token: ${{ secrets.GITHUB_TOKEN }}
