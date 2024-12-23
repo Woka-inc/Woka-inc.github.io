@@ -1,9 +1,9 @@
-name: Github Pages
+name: Deploy Jekyll site to Pages
 
 on:
   push:
     branches:
-      - main  # Here source code branch is `master`, it could be other branch
+      - main
 
 jobs:
   build_and_deploy:
@@ -14,6 +14,12 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3.4' # Ruby 3.3.4 버전 사용
+
+      - name: Install Dependencies
+        run: |
+          gem update --system 3.3.22
+          gem install bundler
+          bundle install
 
       # Use GitHub Actions' cache to cache dependencies on servers
       - uses: actions/cache@v1
