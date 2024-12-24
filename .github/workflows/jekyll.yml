@@ -1,25 +1,33 @@
-name: Build and Deploy to Github Pages
+name: Deploy Jekyll site to Pages
 
 on:
   push:
     branches:
-      - main  # Here source code branch is `master`, it could be other branch
+      - main
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
 
-      # Use GitHub Actions' cache to cache dependencies on servers
-      - uses: actions/cache@v4
+      - uses: ruby/setup-ruby@v1
         with:
-          path: |
-            .asdf/**
-            vendor/bundle
-          key: ${{ runner.os }}-cache-${{ hashFiles('**/cache.key') }}
-          restore-keys: |
-            ${{ runner.os }}-cache-
+          ruby-version: '3.3.4' # Ruby 3.1 버전 사용
+
+      - name: Install Dependencies
+        run: |
+          gem update --system 3.3.22
+          gem install bundler
+          bundle install
+
+      # Jekyll 사이트 빌드 및 배포
+      - uses: jeffreytse/jekyll-deploy-action@v0.6.0
+        with:
+          provider: 'github'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: 'gh-pages'
+          jekyll_src: './'
 
       # Use GitHub Deploy Action to build and deploy to Github
       # For latest version: `jeffreytse/jekyll-deploy-action@master`
