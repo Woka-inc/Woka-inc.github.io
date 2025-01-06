@@ -314,3 +314,13 @@ table {
   color: $selection-color;
   background-color: $selection-background-color;
 }
+
+.img_caption {
+  text-align: center;
+  color: $caption-color;
+}
+
+.img_ref {
+  text-align: center;
+  color: $ref-color;
+}
