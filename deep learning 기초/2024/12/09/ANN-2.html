@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ANN의 학습 | Woka 기술 블로그</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="ANN의 학습">
+<meta name="author" content="yunha">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="인공신경망(Artificial Neural Network, ANN)은 데이터를 학습하고 패턴을 인식하며 새로운 데이터를 예측하는 혁신적인 알고리즘입니다. 앞선 글에서는 인공신경망의 역사와 개념을 살펴보며, 신경망이 어떻게 발전해 왔는지 이해했습니다.">
+<meta property="og:description" content="인공신경망(Artificial Neural Network, ANN)은 데이터를 학습하고 패턴을 인식하며 새로운 데이터를 예측하는 혁신적인 알고리즘입니다. 앞선 글에서는 인공신경망의 역사와 개념을 살펴보며, 신경망이 어떻게 발전해 왔는지 이해했습니다.">
+<link rel="canonical" href="https://woka-inc.github.io/deep%20learning%20%EA%B8%B0%EC%B4%88/2024/12/09/ANN-2.html">
+<meta property="og:url" content="https://woka-inc.github.io/deep%20learning%20%EA%B8%B0%EC%B4%88/2024/12/09/ANN-2.html">
+<meta property="og:site_name" content="Woka 기술 블로그">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2024-12-09T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="ANN의 학습">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"yunha"},"dateModified":"2024-12-09T00:00:00+00:00","datePublished":"2024-12-09T00:00:00+00:00","description":"인공신경망(Artificial Neural Network, ANN)은 데이터를 학습하고 패턴을 인식하며 새로운 데이터를 예측하는 혁신적인 알고리즘입니다. 앞선 글에서는 인공신경망의 역사와 개념을 살펴보며, 신경망이 어떻게 발전해 왔는지 이해했습니다.","headline":"ANN의 학습","mainEntityOfPage":{"@type":"WebPage","@id":"https://woka-inc.github.io/deep%20learning%20%EA%B8%B0%EC%B4%88/2024/12/09/ANN-2.html"},"url":"https://woka-inc.github.io/deep%20learning%20%EA%B8%B0%EC%B4%88/2024/12/09/ANN-2.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="icon" href="/assets/images/favicon.ico">
+  <link rel="canonical" href="https://Woka-inc.github.io">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <script src="/assets/js/main.js"></script><link type="application/atom+xml" rel="alternate" href="https://woka-inc.github.io/feed.xml" title="Woka 기술 블로그">
+<!-- Google tag (gtag.js) -->
+<script>
+  function initGoogleAnalytics() {
+    var doNotTrack = (window.doNotTrack === "1" || navigator.doNotTrack === "1" ||
+      navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1");
+    var enableDNT = "true" == "true";
+
+    if (!enableDNT || !doNotTrack) {
+      var measurementId = 'G-L5T1FMJC6R';
+
+      (function(src) {
+        var tag = document.createElement('script');
+        tag.src = src;
+        tag.async = true;
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      })('https://www.googletagmanager.com/gtag/js?id=' + measurementId);
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', measurementId);
+    }
+  }
+  window.addEventListener("load", initGoogleAnalytics);
+</script>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js" async></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #ff4e00;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+<script src="//cdnjs.cloudflare.com/ajax/libs/photoswipe/5.3.7/umd/photoswipe-lightbox.umd.min.js" async></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/photoswipe/5.3.7/umd/photoswipe.umd.min.js" async></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/photoswipe/5.3.7/photoswipe.min.css" rel="stylesheet">
+<style>
+  .pswp .pswp__container .pswp__img {
+    background-color: white;
+  }
+</style>
+
+<script>
+  function initPhotoSwipe() {
+    let customOptions = {};
+
+    try {
+      const data = ``.replaceAll("=>", ":");
+      customOptions = JSON.parse(data);
+    } catch (e) {
+      console.info("Invalid custom photo previewer options! " + e.message);
+    }
+
+    // Define object and gallery options
+    const options = Object.assign(
+      {
+        gallery: "section.main",
+        children: "a.photo-swipe",
+        photo_scale: 2,
+        // dynamic import is not supported in UMD version
+        pswpModule: PhotoSwipe,
+      },
+      customOptions
+    );
+
+    const galleryEl = document.querySelector(options.gallery);
+    if (!galleryEl) {
+      return;
+    }
+
+    const imgEls = [];
+    const els = galleryEl.querySelectorAll("img:not(.emoji)");
+    els.forEach((el) => {
+      if (el.src.trim() == "") {
+        return;
+      }
+      if (!imgEls.includes(el)) {
+        imgEls.push(el);
+      }
+    });
+
+    if (imgEls.length === 0) {
+      return;
+    }
+
+    imgEls.forEach((imgEl) => {
+      imgEl.outerHTML = `
+      <a class="photo-swipe"
+        href="${imgEl.src}"
+        data-pswp-width="${
+          Math.max(imgEl.naturalWidth, imgEl.width) * options.photo_scale
+        }"
+        data-pswp-height="${
+          Math.max(imgEl.naturalHeight, imgEl.height) * options.photo_scale
+        }"
+        data-pswp-caption="${imgEl.getAttribute("caption") || imgEl.alt}"
+        target="_blank">
+        ${imgEl.outerHTML}
+      </a>`;
+    });
+
+    // Initialize PhotoSwipe 5
+    var lightbox = new PhotoSwipeLightbox(options);
+
+    lightbox.init();
+  }
+
+  window.addEventListener("load", initPhotoSwipe);
+</script>
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L5T1FMJC6R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L5T1FMJC6R');
+</script>
+
+<!-- MathJax -->
+<script>MathJax={"tex":{"inlineMath":[["$","$"],["\\(","\\)"]],"displayMath":[["$$","$$"],["\\[","\\]"]]},"svg":{"fontCache":"global"}}</script><script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>MathJax={"tex":{"inlineMath":[["$","$"],["\\(","\\)"]],"displayMath":[["$$","$$"],["\\[","\\]"]]},"svg":{"fontCache":"global"}}</script><script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header " role="banner">
+
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/">
+  <img class="site-favicon" title="Woka 기술 블로그" src="/assets/images/favicon.ico" onerror="this.style.display='none'">
+  Woka 기술 블로그
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/about.html">ABOUT</a><a class="page-link" href="/archives.html">ARCHIVES</a><a class="page-link" href="/categories.html">CATEGORIES</a><a class="page-link" href="/tags.html">TAGS</a>
+
+
+
+
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('auto' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<div id="click-to-top" class="click-to-top">
+  <i class="fa fa-arrow-up"></i>
+</div>
+<script>
+  (function () {
+    const clickToTop = document.getElementById('click-to-top');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        clickToTop.classList.add('show')
+      }else {
+        clickToTop.classList.remove('show')
+      }
+    });
+    clickToTop.addEventListener('click', () => {
+      window.smoothScrollTo(0);
+    });
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">ANN의 학습</h1>
+  <h2 class="post-subtitle"></h2>
+
+  <div class="post-meta">
+    <time class="dt-published" datetime="2024-12-09T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> Dec 09, 2024
+    </time><span class="post-author left-vsplit"><i class="fa fa-pencil"></i><a href="https://github.com/NaA-hwang" style="color:#777777">yunha</a></span>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 32 mins</span>
+  </div>
+<div class="post-tags">
+<a class="post-tag" href="/tags.html#deep-learning">#deep-learning</a><a class="post-tag" href="/tags.html#ANN">#ANN</a><a class="post-tag" href="/tags.html#%EC%9D%B8%EA%B3%B5%EC%8B%A0%EA%B2%BD%EB%A7%9D">#인공신경망</a><a class="post-tag" href="/tags.html#%EC%97%AD%EC%A0%84%ED%8C%8C">#역전파</a><a class="post-tag" href="/tags.html#%EA%B2%BD%EC%82%AC%ED%95%98%EA%B0%95%EB%B2%95">#경사하강법</a>
+</div></header>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+
+      <p>인공신경망(Artificial Neural Network, ANN)은 데이터를 학습하고 패턴을 인식하며 새로운 데이터를 예측하는 혁신적인 알고리즘입니다. <a href="https://woka-inc.github.io/deep%20learning%20%EA%B8%B0%EC%B4%88/2024/12/09/ANN-1.html">앞선 글</a>에서는 인공신경망의 역사와 개념을 살펴보며, 신경망이 어떻게 발전해 왔는지 이해했습니다.</p>
+
+<p>이번 글에서는 ANN의 학습 과정을 자세히 탐구합니다. 임의의 가중치로 패턴의 예측값을 찾아내는 <strong>순전파(Forward Propagation)</strong>와 손실을 줄이기 위해 가중치를 업데이트하는 <strong>역전파(Backpropagation)</strong>의 원리를 설명하며, 이를 실제로 구현해볼 것입니다. 학생들의 학교 생활 데이터를 활용해 대입 합격 여부를 예측하는 신경망을 구축하면서, ANN의 작동 원리를 직접 확인할 수 있습니다.</p>
+
+<p>이 글을 통해 ANN이 데이터를 학습하고 예측값을 도출하는 과정뿐만 아니라, 학습의 각 단계에서 발생하는 문제를 이해하고 이를 해결하는 방법까지 배우게 될 것입니다. 또한, 마지막에는 TensorFlow를 활용해 인공신경망 모델을 보다 간단하고 효율적으로 구축하는 방법도 소개합니다. ANN의 실질적인 활용과 구현에 대한 통찰을 얻어갈 수 있는 시간이 되길 바랍니다.</p>
+
+<h2 id="학생의-대입-합격-여부-데이터셋">학생의 대입 합격 여부 데이터셋</h2>
+
+<p>이번 글에서는 인공신경망의 학습 과정을 설명하면서, ‘학생의 학교생활 데이터를 입력받아 대입 합격 여부를 예측하는 인공신경망’을 함께 구현해 보겠습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="n">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sh">"</span><span class="s">absences</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>  <span class="c1"># 결석 일수
+</span>    <span class="sh">"</span><span class="s">night_study</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>  <span class="c1"># 야간자율학습 참여 여부
+</span>    <span class="sh">"</span><span class="s">club_activity</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>  <span class="c1"># 전공 관련 동아리 활동 여부
+</span>    <span class="sh">"</span><span class="s">essay_length</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="mi">532</span><span class="p">,</span> <span class="mi">427</span><span class="p">,</span> <span class="mi">735</span><span class="p">,</span> <span class="mi">635</span><span class="p">,</span> <span class="mi">142</span><span class="p">,</span> <span class="mi">395</span><span class="p">,</span> <span class="mi">439</span><span class="p">,</span> <span class="mi">519</span><span class="p">,</span> <span class="mi">498</span><span class="p">,</span> <span class="mi">425</span><span class="p">],</span> <span class="c1"># 자소서 글자 수
+</span>    <span class="sh">"</span><span class="s">exam_score</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="mf">98.5</span><span class="p">,</span> <span class="mf">89.0</span><span class="p">,</span> <span class="mf">72.6</span><span class="p">,</span> <span class="mf">87.3</span><span class="p">,</span> <span class="mf">85.0</span><span class="p">,</span> <span class="mf">96.2</span><span class="p">,</span> <span class="mf">92.8</span><span class="p">,</span> <span class="mf">97.2</span><span class="p">,</span> <span class="mi">71</span><span class="p">,</span> <span class="mf">86.2</span><span class="p">],</span> <span class="c1">#시험 점수
+</span>    <span class="sh">"</span><span class="s">admission</span><span class="sh">"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="c1"># 대입 합격 여부
+</span><span class="p">}</span>
+
+<span class="c1"># 데이터프레임으로 변환
+</span><span class="n">df</span><span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nc">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right"> </th>
+      <th style="text-align: right">absences</th>
+      <th style="text-align: right">night_study</th>
+      <th style="text-align: right">club_activity</th>
+      <th style="text-align: right">essay_length</th>
+      <th style="text-align: right">exam_score</th>
+      <th style="text-align: right">admission</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">532</td>
+      <td style="text-align: right">98.5</td>
+      <td style="text-align: right">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">427</td>
+      <td style="text-align: right">89</td>
+      <td style="text-align: right">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">735</td>
+      <td style="text-align: right">72.6</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">635</td>
+      <td style="text-align: right">87.3</td>
+      <td style="text-align: right">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">142</td>
+      <td style="text-align: right">85</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">5</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">395</td>
+      <td style="text-align: right">96.2</td>
+      <td style="text-align: right">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">6</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">439</td>
+      <td style="text-align: right">92.8</td>
+      <td style="text-align: right">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">7</td>
+      <td style="text-align: right">12</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">519</td>
+      <td style="text-align: right">97.2</td>
+      <td style="text-align: right">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">8</td>
+      <td style="text-align: right">2</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">498</td>
+      <td style="text-align: right">71</td>
+      <td style="text-align: right">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">9</td>
+      <td style="text-align: right">3</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">1</td>
+      <td style="text-align: right">425</td>
+      <td style="text-align: right">86.2</td>
+      <td style="text-align: right">0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>사용할 데이터 셋은 아래와 같은 입력 데이터를 포함하고 있습니다:</p>
+
+<ul>
+  <li>absences: 학교 결석일 수</li>
+  <li>night_study: 야간자율학습 참여 여부 (0: 미참여, 1: 참여)</li>
+  <li>club_activity: 전공 관련 동아리 활동 여부 (0: 미활동, 1: 활동)</li>
+  <li>essay_length: 자기소개서 글자 수</li>
+  <li>exam_score: 대입 시험 평균 점수</li>
+</ul>
+
+<p>마지막 항목인 admission은 대입 합격 여부로, 이 인공신경망이 예측해야 하는 목푯값(Target)입니다.</p>
+
+<p>이 데이터에서 대학 합격 여부를 0 또는 1로 판단해야 하므로, 이 문제는 이진 분류(Binary Classification) 문제로 분류됩니다.</p>
+
+<h2 id="인공신경망ann의-학습-목표">인공신경망(ANN)의 학습 목표</h2>
+
+<p>인공 신경망(Artificial Neural Network, 이하 ANN)의 핵심 목표는 <strong>데이터에서 패턴을 학습하여 이를 하나의 선이나 면으로 표현하는 것</strong>입니다. 궁극적으로는 학습한 패턴을 활용해 새로운 데이터에 대해 <strong>정확한 예측</strong>을 수행해야 하죠. 이를 위해서는 주어진 학습용 데이터를 가지고 <strong>최적의 패턴</strong>을 학습해 내야 합니다. 여기서 패턴을 학습한다는 것은 <strong>최적의 가중치와 편향을 찾아내는 과정</strong>을 의미합니다.</p>
+
+<p>ANN이 패턴을 학습하면, 학습한 패턴을 토대로 입력값에 대한 예측값을 도출할 수 있습니다. 이 예측값과 실제 정답(학습 데이터에서 입력값에 대응하는 출력값) 사이의 오차를 줄이면, 패턴이 더 정교해집니다. 오차는 은닉층 각 노드의 가중치와 편향 값을 조절하여 줄일 수 있습니다. 예를 들어, ‘아까는 $x_1$에 무게를 더 뒀다면, 이번엔 $x_2$에 무게를 더 둬 볼까?’라는 생각을 두 입력 데이터의 가중치와 편향 값을 조절함으로써 구현하는 거죠.</p>
+
+<p>이렇게 예측값과 정답 간의 오차를 줄이는 것은 예측의 <strong>손실(Loss)</strong>을 최소화하는 것을 의미하며, 손실을 최소화하는 학습을 반복함으로써 ANN의 성능을 개선할 수 있습니다.</p>
+
+<p>우리가 구현할 대입 합격 예측 인공신경망은 5가지 입력 데이터를 기반으로 정확한 대입 합격 여부를 예측할 수 있도록 학습되어야 합니다.</p>
+
+<h2 id="순전파forward-propagation-임의의-가중치로-예측값-계산하기">순전파(Forward Propagation): 임의의 가중치로 예측값 계산하기</h2>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/ANN-diagrams_%EC%88%9C%EC%A0%84%ED%8C%8C.png" alt="순전파" width="500"></p>
+<p class="img_caption">순전파</p>
+
+<p>손실을 줄이기 위해서는 정답과 비교할 <strong>예측값</strong>이 필요합니다. 이 예측값을 구하기 위해 앞서 알아봤던 신경망의 입력층, 은닉층, 출력층을 따라 입력 데이터를 ANN에 입력해 예측값을 도출합니다. 이 과정을 <strong>순전파(Forward Propagation)</strong>라고 합니다.</p>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/ANN-diagrams_%EC%9D%80%EB%8B%89%EC%B8%B5%201%EA%B0%9C%20%EC%9D%B8%EA%B3%B5%EC%8B%A0%EA%B2%BD%EB%A7%9D.png" alt="간단한 인공신경망"></p>
+<p class="img_caption">간단한 인공신경망</p>
+
+<p>예시로 가져온 위 그림의 인공신경망은 은닉층이 1개인 매우 단순한 구조입니다. 입력층으로 전달되는 입력 데이터 $x$는 두 개의 피처 $x_1$과 $x_2$를 가지고 있습니다. 은닉층의 유일한 노드는 이 입력 데이터를 전달받아 가중치 $w_1$, $w_2$와 편향 $b$를 계산한 후, 계산 결과 $z$를 활성화 함수인 시그모이드 함수에 입력해 노드의 결괏값 $a$를 도출합니다. 은닉층에는 노드가 하나만 있으므로, 이 노드의 출력값 $a$는 출력층으로 전달되고 그대로 인공신경망 전체의 출력값인 예측값 $\hat{y}$로 반환됩니다.</p>
+
+<p>여기서 중요한 점은 임의의 가중치와 편향을 가지고 값을 예측했다는 것입니다. 따라서 이후에는 ‘학습’을 통해 가중치와 편향을 최적의 값으로 조정하고, 신경망의 예측값 $\hat{y}$과 정답 $y$ 사이의 오차를 줄여 신경망의 예측 성능을 개선해야 합니다.</p>
+
+<h3 id="잠깐-모든-입력-데이터에-대해-이-과정을-수행해야할텐데--벡터화">잠깐, 모든 입력 데이터에 대해 이 과정을 수행해야할텐데? → 벡터화</h3>
+<p>학습 데이터는 여러 개의 입력데이터와 정답 쌍으로 구성되어 있습니다. 그렇다면 데이터 하나하나에 대해 위 과정을 반복해야 할까요? 코드로 구현한다면, 단순히 for 문을 사용하면 될까요?</p>
+
+<p>Andrew Ng 교수님의 <a href="https://www.youtube.com/watch?v=ylkC33LWRjo">유명 강의</a>에서도 언급되었듯이, 단순한 연산을 여러 번 반복해야 할 때에는 for 문보다 더 효율적인 방법이 있습니다. 바로, 여러 데이터를 벡터화(Vectorization)하여 동시에 병렬 연산을 수행하는 것입니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="n">time</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="nf">randn</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="nf">randn</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)</span>
+
+<span class="c1"># 벡터화한 뒤 연산 수행시간 측정
+</span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">dot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">벡터화한 뒤 연산: </span><span class="sh">"</span> <span class="o">+</span> <span class="nf">str</span><span class="p">(</span><span class="mi">1000</span><span class="o">*</span><span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">))</span> <span class="o">+</span> <span class="sh">"</span><span class="s">ms</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="c1"># 반복문으로 연산 수행시간 측정
+</span><span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">1000000</span><span class="p">):</span>
+  <span class="n">c</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">반복문으로 연산: </span><span class="sh">"</span> <span class="o">+</span> <span class="nf">str</span><span class="p">(</span><span class="mi">1000</span><span class="o">*</span><span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">))</span> <span class="o">+</span> <span class="sh">"</span><span class="s">ms</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/%EB%B2%A1%ED%84%B0%ED%99%94%20%EB%B9%84%EA%B5%90%20%EA%B2%B0%EA%B3%BC.png" alt="벡터화 결과 비교" width="400"></p>
+<p class="img_caption">벡터화 결과 비교</p>
+
+<p>위 과정을 실행할 때마다 수행 시간이 조금씩 달라질 수 있지만, for 문을 활용한 연산이 벡터화를 통한 연산에 비해 몇십 배에서 몇백 배 더 오래 걸린다는 사실은 변함이 없습니다.</p>
+
+<h3 id="대입-합격-예측-인공신경망의-첫-번째-순전파">대입 합격 예측 인공신경망의 첫 번째 순전파</h3>
+
+<p>앞에서 배운 순전파 과정을 활용해 대입 합격 여부를 예측하는 인공신경망을 직접 구축해 보겠습니다.</p>
+
+<p>먼저 데이터를 정리하겠습니다. 데이터 셋에서 독립변수 <code class="language-plaintext highlighter-rouge">X</code>(입력 데이터)와 종속변수 <code class="language-plaintext highlighter-rouge">y</code>(예측값이 가까워져야 할 정답)를 분리한 뒤, 입력 데이터를 정규화했습니다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">X</code>의 타입을 출력해 보니 numpy 배열임을 알 수 있습니다. 이는 여러 입력 데이터를 동시에 처리하기 위해 numpy 배열로 벡터화한 것입니다. <code class="language-plaintext highlighter-rouge">X</code>의 크기는 <code class="language-plaintext highlighter-rouge">10x5</code>로, 데이터 샘플 수(10)가 행, 입력 데이터의 종류 수(5)가 열로 나타난 것을 알 수 있습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 독립변수(X, 입력 데이터)와 종속변수(y, 정답) 분리
+</span><span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="sh">"</span><span class="s">absences</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">night_study</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">club_activity</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">essay_length</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">exam_score</span><span class="sh">"</span><span class="p">]].</span><span class="n">values</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="sh">"</span><span class="s">admission</span><span class="sh">"</span><span class="p">].</span><span class="n">values</span><span class="p">.</span><span class="nf">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># 데이터 정규화: 평균이 0, 표준편차가 1인 값으로 입력값의 스케일 조정
+</span><span class="n">X</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">X</span><span class="p">.</span><span class="nf">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="n">X</span><span class="p">.</span><span class="nf">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="nf">type</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">X</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+</code></pre></div></div>
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/%EB%8F%85%EB%A6%BD%EB%B3%80%EC%88%98%20%EC%B6%9C%EB%A0%A5%20%EA%B2%B0%EA%B3%BC.png" alt="독립변수 출력 결과" width="300"></p>
+<p class="img_caption">독립변수 출력 결과</p>
+
+<p>이번 인공 신경망에서는 두 가지 활성화 함수를 사용했습니다. 시그모이드 함수와 함께 ReLU 함수도 사용했는데, 이 두 함수의 차이점에 대해서는 뒤에서 자세히 설명하겠습니다.</p>
+
+<p>이 인공신경망은 입력층에 5개의 뉴런을 가지고 있습니다. 입력 데이터가 5개의 피처를 가지고 있기 때문입니다. 입력층 다음 순서로는 은닉층을 하나 거치게 되는데, 은닉층에는 임의로 3개의 뉴런을 설정했습니다. 출력층은 하나의 예측값(합격 여부 혹은 합격 확률)을 계산하므로 뉴런 1개가 필요합니다.</p>
+
+<p>초기 가중치와 편향은 확실한 학습 결과를 보여주기 위해 랜덤 값으로 설정했습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 활성화 함수 정의
+</span><span class="k">def</span> <span class="nf">relu</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="p">.</span><span class="nf">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="p">.</span><span class="nf">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+
+<span class="c1"># 초기 가중치와 편향 랜덤 초기화
+</span><span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="nf">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># 결과 재현성을 위한 랜덤 시드 설정
+</span>
+<span class="c1"># 입력층 -&gt; 은닉층
+</span><span class="n">weights_input_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="nf">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># (입력층 뉴런 5개 -&gt; 은닉층 뉴런 3개)
+</span><span class="n">bias_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="nf">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>           <span class="c1"># 은닉층 편향
+</span>
+<span class="c1"># 은닉층 -&gt; 출력층
+</span><span class="n">weights_hidden_output</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="nf">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># (은닉층 뉴런 3개 -&gt; 출력 뉴런 1개)
+</span><span class="n">bias_output</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="nf">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>           <span class="c1"># 출력층 편향
+</span></code></pre></div></div>
+
+<p>이제 순전파 과정을 함수로 정의하고 실행해 보겠습니다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">forward_propagation()</code> 함수는 순전파 과정을 구현하며, 두 행렬(층에 입력된 값 행렬과 층의 가중치 행렬)을 곱하기 위해 <code class="language-plaintext highlighter-rouge">numpy.dot()</code> 메소드를 사용합니다. 그리고 가중치와 편향 값을 함수의 파라미터로 전달해, 이후에 업데이트된 가중치와 편향에 대해 재사용할 수 있도록 설계했습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 순전파 구현
+</span><span class="k">def</span> <span class="nf">forward_propagation</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">weights_input_hidden</span><span class="p">,</span> <span class="n">bias_hidden</span><span class="p">,</span> <span class="n">weights_hidden_output</span><span class="p">,</span> <span class="n">bias_output</span><span class="p">):</span>
+    <span class="c1"># 은닉층 계산
+</span>    <span class="n">z_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">weights_input_hidden</span><span class="p">)</span> <span class="o">+</span> <span class="n">bias_hidden</span>
+    <span class="n">a_hidden</span> <span class="o">=</span> <span class="nf">relu</span><span class="p">(</span><span class="n">z_hidden</span><span class="p">)</span>  <span class="c1"># ReLU 활성화 함수 적용
+</span>
+    <span class="c1"># 출력층 계산
+</span>    <span class="n">z_output</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">dot</span><span class="p">(</span><span class="n">a_hidden</span><span class="p">,</span> <span class="n">weights_hidden_output</span><span class="p">)</span> <span class="o">+</span> <span class="n">bias_output</span>
+    <span class="n">a_output</span> <span class="o">=</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">z_output</span><span class="p">)</span>  <span class="c1"># Sigmoid 활성화 함수 적용
+</span>
+    <span class="k">return</span> <span class="n">a_output</span><span class="p">,</span> <span class="n">a_hidden</span>
+
+<span class="c1"># 순전파 실행
+</span><span class="n">output</span><span class="p">,</span> <span class="n">hidden_activation</span> <span class="o">=</span> <span class="nf">forward_propagation</span><span class="p">(</span><span class="n">X</span><span class="p">,</span>
+                                                <span class="n">weights_input_hidden</span><span class="p">,</span>
+                                                <span class="n">bias_hidden</span><span class="p">,</span>
+                                                <span class="n">weights_hidden_output</span><span class="p">,</span>
+                                                <span class="n">bias_output</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>결과는 아래와 같습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 결과 출력
+</span><span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">입력 데이터 (정규화 후):</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="s">은닉층 활성화 값:</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">hidden_activation</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="s">출력층 예측값 (합격 확률):</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+</code></pre></div></div>
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/%EC%88%9C%EC%A0%84%ED%8C%8C%20%EC%B6%9C%EB%A0%A5%20%EA%B2%B0%EA%B3%BC.png" alt="순전파 출력 결과"></p>
+<p class="img_caption">순전파 출력 결과</p>
+
+<p>현재는 임의의 가중치와 편향 값을 사용했기 때문에, 예측값 또한 랜덤한 양상을 띠고 있습니다.</p>
+
+<h2 id="손실함수-예측값과-정답-사이의-오차-계산">손실함수: 예측값과 정답 사이의 오차 계산</h2>
+
+<p>순전파 과정에서 모델이 현재 패턴으로 예측값을 도출하면, 이 예측값과 정답 사이의 오차인 손실을 계산해야 합니다. 이를 기반으로 가중치를 조정하여 손실을 줄이는 방향으로 모델의 성능을 점진적으로 개선해 나가죠. 이때, 손실을 계산하는 데 사용되는 함수를 <strong>손실함수(Loss Function)</strong>라고 하며, 예측값($\hat{y}$)과 정답($y$) 사이의 손실을 $L(\hat{y}, y)$로 표현합니다.</p>
+
+<p>어떤 데이터와 문제를 다루는지에 따라 다양한 손실 함수 중 적절한 함수를 선택해야 합니다. 대표적인 손실 함수 중 하나인 <strong>평균제곱오차(Mean Squared Error, MSE)</strong>는 말 그대로 예측값과 실제 값의 오차를 제곱한 뒤 평균을 내어 계산합니다. 따라서 결괏값이 작을수록 모델의 예측 오차가 작다는 것을 의미합니다.
+$$ MSE=\frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{y}_i)^2$$</p>
+<ul>
+  <li>$y_i$: 실제값</li>
+  <li>$\hat{y}_i$: 예측값</li>
+  <li>$n$: 데이터의 총 개수</li>
+</ul>
+
+<p>MSE의 주요 특징은, 오차를 제곱해 양수로 만들기 때문에 데이터 간의 양수와 음수 오차가 상쇄되지 않는다는 점입니다. 또한, 오차를 제곱하기 때문에 큰 오차일수록 더 큰 영향을 미쳐 민감하게 반응하게 됩니다. MSE는 제곱 연산과 평균 연산으로 구성되어 있으며, 두 연산 모두 연속적이고 미분 가능하기 때문에 연속적인 값을 예측하는 회귀 문제에서 주로 사용됩니다.</p>
+
+<h3 id="대입-합격-예측-인공신경망의-손실함수">대입 합격 예측 인공신경망의 손실함수</h3>
+
+<p>대입 합격 여부를 예측하는 문제는 이진 분류 문제에 해당합니다. 이러한 이진 분류 문제를 다루는 인공신경망에는 손실함수로 Binary Cross-Entropy(이하 BCE)가 적합합니다.</p>
+
+<p>앞선 순전파 과정에서 출력된 예측값은 0과 1 사이의 확률값을 나타내며, 이는 모델이 특정 클래스(합격)에 속할 가능성을 예측한 결과입니다. Cross-Entropy는 이러한 모델의 확률 출력값과 실제 정답 간의 차이를 측정하는 데에 최적화되어 있습니다. BCE는 실제 정답이 1일 때 예측 확률값이 1에 가까울수록, 실제 정답이 0일 때 예측 확률 값이 0에 가까울수록 손실 값을 낮게 계산합니다. 이러한 특징 때문에 BCE는 이진 분류 문제에서 널리 사용됩니다.</p>
+
+<p>Binary Cross-Entropy 손실함수는 다음과 같이 정의됩니다.</p>
+
+<p>$$BCE=-\frac{1}{n}\sum_{i=1}^{n}[y_i\log{\hat{y_i}}+(1-y_i)\log{(1-\hat{y_i})}]$$</p>
+<ul>
+  <li>$y_i$: 실제 클래스(0 또는 1)</li>
+  <li>$\hat{y}_i$: 예측 확률값(0~1)</li>
+  <li>$n$: 데이터의 총 개수</li>
+</ul>
+
+<p>Binary Cross-Entropy를 함수로 정의하고 이번 순전파 과정에서 계산된 예측값과 정답 사이의 손실을 계산해보겠습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Binary Cross-Entropy 손실 함수 정의
+</span><span class="k">def</span> <span class="nf">binary_cross_entropy</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
+    <span class="c1"># y_true: 실제값 (0 또는 1)
+</span>    <span class="c1"># y_pred: 예측 확률값 (0~1)
+</span>
+    <span class="c1"># 안정성을 위해 log의 입력값 범위를 제한
+</span>    <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-10</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">clip</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">epsilon</span><span class="p">)</span>
+
+    <span class="c1"># BCE 계산
+</span>    <span class="n">loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="p">.</span><span class="nf">mean</span><span class="p">(</span><span class="n">y_true</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="n">y_pred</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y_true</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">loss</span>
+
+<span class="c1"># BCE 손실 계산
+</span><span class="n">loss</span> <span class="o">=</span> <span class="nf">binary_cross_entropy</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Binary Cross-Entropy 손실 값:</span><span class="sh">"</span><span class="p">,</span> <span class="n">loss</span><span class="p">)</span>
+</code></pre></div></div>
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/BCE%20%EC%B6%9C%EB%A0%A5%20%EA%B2%B0%EA%B3%BC.png" alt="BCE 출력 결과" width="500"></p>
+<p class="img_caption">BCE 출력 결과</p>
+
+<p>BCE 손실 값은 0에 가까울수록 예측이 정확하다는 것을 의미합니다. 0.78이면 정답과 예측값 사이의 오차가 꽤 크다고 할 수 있겠죠? 이제 이 오차를 줄이기 위한 다음 단계를 살펴봅시다.</p>
+
+<h2 id="경사하강법-손실함수의-최저점으로-다가가는-과정">경사하강법: 손실함수의 최저점으로 다가가는 과정</h2>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/ANN-diagrams_%EC%86%90%EC%8B%A4%ED%95%A8%EC%88%98.png" alt="손실함수" width="500"></p>
+<p class="img_caption">손실함수</p>
+
+<p>적합한 손실함수를 사용하면 손실을 그래프로 그렸을 때 위 그림처럼 손실이 최저가 되는 최적의 지점이 존재합니다. 우리의 목표이자 인공신경망(ANN)의 학습 목표는 바로 이 최저 손실 지점에 도달할 수 있는 (즉, 오차가 최저가 되는) 가중치를 찾아내는 것입니다. 학습 초기에는 가중치가 임의의 값으로 설정되었기 때문에, 단번에 최적의 지점을 찾기란 사실상 불가능합니다. 따라서 그림에서처럼 현재 가중치의 조합으로 계산한 손실 값을 확인한 뒤, 가중치를 수정해서 손실 함수를 따라 내리막 방향으로 한 걸음씩 이동해 나가는 과정을 반복해야 합니다. 이 과정을 <strong>경사하강법(Gradient Descent)</strong>라고 합니다.</p>
+
+<p>경사하강법은 다음 두 단계로 이루어집니다:</p>
+<ol>
+  <li>가중치를 어느 방향으로, 얼만큼 움직일지 결정하기</li>
+  <li>계산한 크기만큼 기존의 가중치 업데이트하기</li>
+</ol>
+
+<p><br></p>
+<blockquote>
+  <p>1) 가중치를 어느 방향으로, 얼만큼 움직일지 결정하기</p>
+</blockquote>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/ANN-diagrams_%EC%86%90%EC%8B%A4%ED%95%A8%EC%88%98%EC%97%90%EC%84%9C%20%EA%B8%B0%EC%9A%B8%EA%B8%B0.png" alt="손실함수에서 기울기" width="400"></p>
+<p class="img_caption">손실함수에서 기울기 따라 이동</p>
+
+<p>현재 시작점에서 손실을 줄여 최적의 지점으로 다가가려면, 현재 지점에서의 <strong>기울기(Gradient)</strong>를 계산해 그 기울기에 -1을 곱한 방향으로 이동해야 합니다. 그리고 이 방향으로 얼마나 큰 한 걸음을 내딛을 것인지는 <strong>학습률(Learning Rate, α)</strong>로 결정합니다. 학습률은 경사하강법에서 각 단계의 이동 크기를 조절하는 중요한 하이퍼파라미터(딥러닝 모델에서 학습 과정에 영향을 미치는, 사용자가 직접 설정하는 값)입니다.</p>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/ANN-diagrams_%EC%86%90%EC%8B%A4%ED%95%A8%EC%88%98%EC%97%90%EC%84%9C%20%ED%95%99%EC%8A%B5%EB%A5%A0.png" alt="손실함수에서 학습률"></p>
+<p class="img_caption">손실함수에서 학습률에 따른 이동 양상</p>
+
+<p>학습률이 지나치게 크다면, 한 걸음이 너무 커져서 최적의 지점을 계속 지나쳐 손실 값이 발산할 위험이 있습니다. 반대로 학습률이 너무 작다면, 한 걸음씩 이동하는 속도가 너무 느려 전체 학습에 지나치게 많은 시간이 소요될 수 있습니다. 따라서 학습률을 반복적으로 실험하며 최적의 값을 찾아야 하며, 일반적으로 0.1에서 시작해 0.1배씩 줄여나가며 테스트합니다(<a href="https://modulabs.co.kr/blog/importance-of-learning-rate-and-finding-appropriate-learning-rate">출처</a>).</p>
+
+<p>이렇게 한 걸음의 방향과 크기가 정해지면, 가중치가 한 번 움직이는(=업데이트되는) 값은 음의 기울기와 학습률의 곱인 $-α\frac{dL}{dw}$가 됩니다.</p>
+
+<p><br></p>
+<blockquote>
+  <p>2) 계산한 크기만큼 기존의 가중치 업데이트하기</p>
+</blockquote>
+
+<p>다음은 간단합니다. 기존의 가중치에 움직일 값을 더해 새로운 가중치로 업데이트하면 되는 것이죠. 이렇게 계산된 값만큼 가중치를 이동시키며 손실 값을 점진적으로 줄여갑니다.</p>
+
+<p>경사하강법을 우리의 대입 합격 예측 인공신경망에 적용하기 위해서는, 가중치를 움직일 방향인 ‘-기울기(음의 기울기)’를 구할 수 있어야 합니다. 따라서 손실 함수에서의 도함수를 구하는 과정을 먼저 알아본 뒤, 우리 인공신경망에서 경사하강법을 구현해보겠습니다.</p>
+
+<h2 id="역전파backpropagation-손실함수에-필요한-도함수를-구하는-과정">역전파(Backpropagation): 손실함수에 필요한 도함수를 구하는 과정</h2>
+
+<p>ANN은 예측값과 정답 사이의 손실을 최소화하기 위해 가중치를 조정해서 경사하강법으로 최적의 가중치에 한 걸음씩 다가갑니다. 이를 위해 기울기의 반대 방향과 적절한 학습률을 곱해 가중치를 조정하는 과정이 필요합니다. 그런데 이 때, 기울기를 어떻게 계산할 수 있을까요?</p>
+
+<p>기울기를 구하기 위해서는 손실 함수를 가중치에 대해 미분합니다. 하지만 복잡한 신경망의 경우 수십억 개의 가중치를 가지고 있기도 하며, 이 모든 가중치에 대해 일일이 미분하고 값을 수정하려면 계산량이 기하급수적으로 증가하게 됩니다. 처리 시간이 비현실적으로 길어져 비효율적이게 되죠.</p>
+
+<p>이 문제를 해결하기 위해 딥러닝에서는 <strong>역전파(Backpropagation)</strong>라는 알고리즘을 사용합니다.</p>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/ANN-diagrams_%EC%97%AD%EC%A0%84%ED%8C%8C.png" alt="역전파" width="500"></p>
+<p class="img_caption">역전파</p>
+
+<p>앞서 살펴본 <strong>순전파(Forward Propagation)</strong>가 인공신경망의 <strong>입력층에서 출력층</strong>으로 계산을 진행하며 예측값을 구하는 과정이었다면, <strong>역전파(Backpropagation)</strong>는 <strong>출력층에서 입력층</strong>으로 계산을 진행합니다. 순전파의 목적이 주어진 입력값에 대해 신경망의 예측값을 계산하는 데 있었다면, 역전파의 목적은 <strong>손실함수의 가중치에 대한 도함수(기울기)</strong>를 구하고 이를 이용해 출력층에 가까운 은닉층부터 가중치를 업데이트하는 데 있습니다.</p>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/ANN-diagrams_%EB%AF%B8%EB%B6%84%EC%9D%98%20%EC%97%B0%EC%87%84%EB%B2%95%EC%B9%99%20in%20%EC%97%AD%EC%A0%84%ED%8C%8C.png" alt="미분의 연쇄법칙"></p>
+<p class="img_caption">미분의 연쇄법칙</p>
+
+<p>다소 복잡해보일 수 있지만, 신경망을 거슬러가는 역전파 과정의 빨간색 화살표는 모두 공통된 법칙을 사용하고 있습니다. 바로 <strong>미분의 연쇄법칙(chain rule)</strong>입니다. 순전파에서 예측값($\hat{y}$)을 출력한 후, 출력층에서 손실함수($L(\hat{y},y)$)를 구했었습니다. 이제는 반대 방향으로 이동하며 각 노드의 도함수를 구하고, 역전파의 이전 단계에서 계산된 도함수와의 연쇄법칙을 통해 손실함수에 대한 여러 변수의 도함수를 계산합니다.</p>
+
+<p>위 그림의 신경망에서는 최종적으로 손실 함수에 대한 가중치 $w_1$과 $w_2$ 각각의 도함수($\frac{dL}{dw_1}$, $\frac{dL}{dw_2}$)를 구할 수 있습니다. 이렇게 계산된 도함수를 사용해 $w_1$과 $w_2$의 값을 업데이트합니다. 출력층 부근에서 계산한 오차가 입력층 부근의 가중치 $w_1$과 $w_2$까지 역전파되어 손실 함수에 대한 도함수를 구할 수 있게 된 것이죠.</p>
+
+<p>위 그림에서는 은닉층이 한 층뿐이었지만, 여러 은닉층이 쌓여 있다면 출력층에서 입력층으로 향하는 역전파의 방향성 때문에 출력층에 가까운 은닉층의 가중치부터 수정됩니다. 입력층에 가까워질수록 누적되는 도함수가 많아지겠죠. 여기서, 활성화 함수인 시그모이드 함수로 인한 문제가 발생할 수 있습니다.</p>
+
+<h3 id="활성화함수-제-2탄-어떤-활성화-함수를-선택할-것인가">활성화함수 제 2탄: 어떤 활성화 함수를 선택할 것인가?</h3>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/%EC%8B%9C%EA%B7%B8%EB%AA%A8%EC%9D%B4%EB%93%9C%EC%99%80%20%EB%8F%84%ED%95%A8%EC%88%98.png" alt="시그모이드와 도함수" width="500"></p>
+<p class="img_caption">시그모이드와 도함수
+    <a class="img_ref" href="https://towardsdatascience.com/derivative-of-the-sigmoid-function-536880cf918e">(출처)</a>
+</p>
+
+<p>파란색으로 그려진 시그모이드 함수를 보면, 입력값이 너무 크거나 작아질 경우 기울기(도함수)가 매우 작아지는 것을 볼 수 있습니다. 실제로 빨간 점선으로 그려진 시그모이드의 도함수를 보았을 때, 입력 값이 일정 수준을 넘어서면 도함수 값이 0에 가까워지는 경향을 보입니다.</p>
+
+<p>역전파 과정에서 입력층으로 갈수록 기울기가 누적된다고 했는데, 극단적으로 모든 활성화 함수로 시그노이드 함수를 쓰게 되면 결국 누적된 도함수 값이 0에 매우 가까워지는 상황이 발생합니다. 이로 인해 발생하는 문제가 바로 <strong>기울기 소실 문제(Gradient Vanishing)</strong>입니다.</p>
+
+<p>이 경우 층이 깊은 신경망에서 출력층 부근 은닉층의 가중치는 어느 정도 학습될 수 있지만, 입력층에 가까운 가중치들은 제대로 학습되기 어렵습니다. 따라서 상황에 따라 다른 활성화 함수를 채택해야 합니다.</p>
+
+<p>그럼에도 불구하고 시그모이드 함수는 출력 값을 0~1의 범위로 제한한다는 특징 덕분에, 이진 분류를 위한 신경망의 출력층에서는 효과적으로 사용됩니다. 그 외의 은닉층에서는 시그노이드 함수 사용을 신중히 고려해야겠죠.</p>
+
+<p><strong>ReLU 함수 (Rectified Linear Unit)</strong></p>
+
+<p>시그모이드 함수의 기울기 소실 문제를 해결한 함수가 바로 ReLU(Rectified Linear Unit) 함수입니다. ReLU 함수는 입력값과 0 중 더 큰 값을 선택하는 방식으로 동작합니다.</p>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/ReLU.png" alt="ReLU함수" width="350"></p>
+<p class="img_caption">ReLU 함수
+    <a class="img_ref" href="https://limitsinx.tistory.com/40">(출처)</a>
+</p>
+
+<p>ReLU함수는 음수를 0으로 바꾸기 때문에 노드에 비선형성을 추가하는 기존 활성화 함수의 목적을 달성합니다. 동시에 양수의 입력값에 대해 기울기가 항상 1이기 때문에, 기울기 소실 문제에 대한 걱정이 필요 없죠.</p>
+
+<p>다만, ReLU 함수의 음수의 입력값에 대한 기울기는 0이기 때문에, 음수의 입력값이 지속적으로 주어지면 해당 뉴런의 가중치는 학습되지 않는 죽은 뉴런 문제(Dying ReLU)가 발생하기도 합니다.</p>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/Leaky%20ReLU.png" alt="LeakyReLU함수" width="400"></p>
+<p class="img_caption">Leaky ReLU 함수
+    <a class="img_ref" href="https://medium.com/@sreeku.ralla/activation-functions-relu-vs-leaky-relu-b8272dc0b1be">(출처)</a>
+</p>
+
+<p>이를 해결하기 위해 Leaky ReLU와 같은 변형된 활성화 함수를 사용할 수도 있습니다. Leaky ReLU는 음수의 입력값에 대해서도 약간의 기울기를 부여해, ReLU 함수의 죽은 뉴런 문제를 완화합니다.</p>
+
+<p>하지만 Leaky ReLU는 추가적인 하이퍼파라미터(음수 기울기 값)를 설정해야 하며, 이 값의 최적화가 문제에 따라 달라질 수 있어 복잡성을 증가시킬 수 있습니다. 또한, ReLU는 구현이 간단하고 대부분의 경우 기본값으로도 충분히 좋은 성능을 보여주기 때문에 여전히 널리 사용됩니다.</p>
+
+<h3 id="대입-합격-예측-인공신경망의-오차-역전파와-경사하강법">대입 합격 예측 인공신경망의 오차 역전파와 경사하강법</h3>
+
+<p>경사하강법을 적용해 앞서 계산한 손실(약 0.783)을 줄여보도록 하겠습니다.</p>
+
+<p>경사하강법을 적용하기 위해서는 두 가지 값이 필요했습니다. 손실값이 손실 함수의 경사를 따라 내려가도록 할 때, 한 걸음의 보폭이 되는 학습률과 한 걸음의 방향이 되는 기울기였습니다. 이번 실습에서는 학습률을 0.01로 설정했습니다.</p>
+
+<p>기울기를 구하는 함수를 <code class="language-plaintext highlighter-rouge">backward_propagation()</code>으로 구현했습니다. 함수가 다소 복잡하지만, 각 가중치와 편향에 대한 기울기($d$~)가 <code class="language-plaintext highlighter-rouge">np.dot()</code> 연산을 통해 입력층에 다가갈수록 누적되고 있다는 것만 확인하고 넘어가도 좋습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 학습률 (learning rate)
+</span><span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+<span class="k">def</span> <span class="nf">backward_propagation</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">a_hidden</span><span class="p">,</span> <span class="n">a_output</span><span class="p">,</span> <span class="n">weights_input_hidden</span><span class="p">,</span> <span class="n">weights_hidden_output</span><span class="p">):</span>
+    <span class="c1"># 출력층의 오차
+</span>    <span class="n">d_output</span> <span class="o">=</span> <span class="n">a_output</span> <span class="o">-</span> <span class="n">y_true</span>  <span class="c1"># 출력층의 손실의 미분
+</span>
+    <span class="c1"># 은닉층 -&gt; 출력층의 가중치와 편향에 대한 기울기
+</span>    <span class="n">d_weights_hidden_output</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">dot</span><span class="p">(</span><span class="n">a_hidden</span><span class="p">.</span><span class="n">T</span><span class="p">,</span> <span class="n">d_output</span><span class="p">)</span>  <span class="c1"># 은닉층 가중치 기울기
+</span>    <span class="n">d_bias_output</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="n">d_output</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># 출력층 편향 기울기
+</span>
+    <span class="c1"># 은닉층의 오차
+</span>    <span class="n">d_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">dot</span><span class="p">(</span><span class="n">d_output</span><span class="p">,</span> <span class="n">weights_hidden_output</span><span class="p">.</span><span class="n">T</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">a_hidden</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># ReLU의 미분 적용
+</span>
+    <span class="c1"># 입력층 -&gt; 은닉층의 가중치와 편향에 대한 기울기
+</span>    <span class="n">d_weights_input_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">dot</span><span class="p">(</span><span class="n">X</span><span class="p">.</span><span class="n">T</span><span class="p">,</span> <span class="n">d_hidden</span><span class="p">)</span>  <span class="c1"># 입력층 가중치 기울기
+</span>    <span class="n">d_bias_hidden</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="n">d_hidden</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># 은닉층 편향 기울기
+</span>
+    <span class="k">return</span> <span class="n">d_weights_input_hidden</span><span class="p">,</span> <span class="n">d_bias_hidden</span><span class="p">,</span> <span class="n">d_weights_hidden_output</span><span class="p">,</span> <span class="n">d_bias_output</span>
+
+<span class="k">def</span> <span class="nf">update_weights</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">gradients</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">):</span>
+    <span class="c1"># weights: 기존 가중치
+</span>    <span class="c1"># gradients: 가중치 기울기
+</span>    <span class="c1"># learning_rate: 학습률
+</span>    <span class="k">return</span> <span class="n">weights</span> <span class="o">-</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">gradients</span>
+
+<span class="c1"># 역전파를 통해 기울기 계산
+</span><span class="n">d_weights_input_hidden</span><span class="p">,</span> <span class="n">d_bias_hidden</span><span class="p">,</span> <span class="n">d_weights_hidden_output</span><span class="p">,</span> <span class="n">d_bias_output</span> <span class="o">=</span> <span class="nf">backward_propagation</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">hidden_activation</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">weights_input_hidden</span><span class="p">,</span> <span class="n">weights_hidden_output</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>이렇게 구한 기울기를 가지고 입력층&amp;은닉층의 가중치/편향과 은닉층&amp;출력층의 가중치/편향 값을 업데이트 하겠습니다. 그 다음, 앞서 사용했던 순전파 함수를 재사용해 업데이트된 예측값을 계산해보았습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 가중치와 편향 업데이트
+</span><span class="n">weights_input_hidden</span> <span class="o">=</span> <span class="nf">update_weights</span><span class="p">(</span><span class="n">weights_input_hidden</span><span class="p">,</span> <span class="n">d_weights_input_hidden</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
+<span class="n">bias_hidden</span> <span class="o">=</span> <span class="nf">update_weights</span><span class="p">(</span><span class="n">bias_hidden</span><span class="p">,</span> <span class="n">d_bias_hidden</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
+<span class="n">weights_hidden_output</span> <span class="o">=</span> <span class="nf">update_weights</span><span class="p">(</span><span class="n">weights_hidden_output</span><span class="p">,</span> <span class="n">d_weights_hidden_output</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
+<span class="n">bias_output</span> <span class="o">=</span> <span class="nf">update_weights</span><span class="p">(</span><span class="n">bias_output</span><span class="p">,</span> <span class="n">d_bias_output</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
+
+<span class="c1"># 순전파 재실행 (업데이트된 가중치 사용)
+</span><span class="n">updated_output</span><span class="p">,</span> <span class="n">updated_hidden_activation</span> <span class="o">=</span> <span class="nf">forward_propagation</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">weights_input_hidden</span><span class="p">,</span> <span class="n">bias_hidden</span><span class="p">,</span> <span class="n">weights_hidden_output</span><span class="p">,</span> <span class="n">bias_output</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="se">\n</span><span class="s">업데이트된 예측값 (합격 확률):</span><span class="se">\n</span><span class="sh">"</span><span class="p">,</span> <span class="n">updated_output</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/%EC%98%88%EC%B8%A1%EA%B0%92%20%EC%97%85%EB%8D%B0%EC%9D%B4%ED%8A%B8%20%EC%B6%9C%EB%A0%A5.png" alt="예측값 업데이트 출력" width="300"></p>
+<p class="img_caption">예측값 업데이트 출력</p>
+
+<p>각 입력 데이터에 대해 도출한 예측값만 봐서는 앞선 순전파 결과와 크게 달라진 점이 눈에 띄지 않습니다. 예측값과 정답 사이의 오차를 계산하는 손실 함수를 적용해보면, 예측의 정확도가 어떻게 변화하는지 확인할 수 있겠죠?</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 업데이트된 예측값의 손실
+</span><span class="n">updated_loss</span> <span class="o">=</span> <span class="nf">binary_cross_entropy</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">updated_output</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">초기 Binary Cross-Entropy 손실 값: </span><span class="sh">"</span><span class="p">,</span> <span class="n">loss</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">업데이트된 Binary Cross-Entropy 손실 값:</span><span class="sh">"</span><span class="p">,</span> <span class="n">updated_loss</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/%EC%86%90%EC%8B%A4%20%EB%B9%84%EA%B5%90.png" alt="손실 비교" width="700"></p>
+<p class="img_caption">손실 비교</p>
+
+<p>손실이 줄었습니다! 미묘한 값이지만, 우리는 인공신경망에게 1회의 학습을 진행했습니다. 이 과정을 여러번 거듭할수록 손실이 줄고, 우리 인공신경망은 패턴을 더 잘 학습해서 더 나은 예측을 할 수 있습니다.</p>
+
+<p>앞의 과정을 10번 더 반복해보고 손실이 어떻게 변화하는지 보겠습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+  <span class="c1"># 기울기 계산
+</span>  <span class="n">d_weights_input_hidden</span><span class="p">,</span> <span class="n">d_bias_hidden</span><span class="p">,</span> <span class="n">d_weights_hidden_output</span><span class="p">,</span> <span class="n">d_bias_output</span> <span class="o">=</span> <span class="nf">backward_propagation</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">updated_hidden_activation</span><span class="p">,</span> <span class="n">updated_output</span><span class="p">,</span> <span class="n">weights_input_hidden</span><span class="p">,</span> <span class="n">weights_hidden_output</span>
+  <span class="p">)</span>
+
+  <span class="c1"># 가중치와 편향 업데이트
+</span>  <span class="n">weights_input_hidden</span> <span class="o">=</span> <span class="nf">update_weights</span><span class="p">(</span><span class="n">weights_input_hidden</span><span class="p">,</span> <span class="n">d_weights_input_hidden</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
+  <span class="n">bias_hidden</span> <span class="o">=</span> <span class="nf">update_weights</span><span class="p">(</span><span class="n">bias_hidden</span><span class="p">,</span> <span class="n">d_bias_hidden</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
+  <span class="n">weights_hidden_output</span> <span class="o">=</span> <span class="nf">update_weights</span><span class="p">(</span><span class="n">weights_hidden_output</span><span class="p">,</span> <span class="n">d_weights_hidden_output</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
+  <span class="n">bias_output</span> <span class="o">=</span> <span class="nf">update_weights</span><span class="p">(</span><span class="n">bias_output</span><span class="p">,</span> <span class="n">d_bias_output</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
+
+  <span class="c1"># 순전파 재실행 (업데이트된 가중치 사용)
+</span>  <span class="n">updated_output</span><span class="p">,</span> <span class="n">updated_hidden_activation</span> <span class="o">=</span> <span class="nf">forward_propagation</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">weights_input_hidden</span><span class="p">,</span> <span class="n">bias_hidden</span><span class="p">,</span> <span class="n">weights_hidden_output</span><span class="p">,</span> <span class="n">bias_output</span><span class="p">)</span>
+
+  <span class="c1"># 업데이트된 예측값의 손실
+</span>  <span class="n">updated_loss</span> <span class="o">=</span> <span class="nf">binary_cross_entropy</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">updated_output</span><span class="p">)</span>
+  <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">epoch</span><span class="o">+</span><span class="mi">2</span><span class="si">}</span><span class="s">회차 업데이트된 Binary Cross-Entropy 손실 값:</span><span class="sh">"</span><span class="p">,</span> <span class="n">updated_loss</span><span class="p">)</span>
+  <span class="n">epoch</span> <span class="o">+=</span> <span class="mi">1</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/%EA%B0%80%EC%A4%91%EC%B9%98%20%EC%97%85%EB%8D%B0%EC%9D%B4%ED%8A%B8%20%EB%B0%98%EB%B3%B5%20%EA%B2%B0%EA%B3%BC.png" alt="가중치 업데이트 반복 결과"></p>
+<p class="img_caption">가중치 업데이트 반복 결과</p>
+
+<p>처음 실행했던 학습까지 포함해서 총 11회의 학습을 반복한 결과, 손실이 약 0.556까지 줄어들었습니다.</p>
+
+<h2 id="tensorflow로-인공신경망-구현하기">TensorFlow로 인공신경망 구현하기</h2>
+
+<p>지금까지 인공신경망의 학습 과정을 하나하나 구현해보았는데요, TensorFlow라는 라이브러리를 사용하면 인공신경망을 학습시키기 위한 각종 함수를 직접 구현하지 않고도 동일한 과정을 수행할 수 있습니다. Google이 개발한 TensorFlow는 딥러닝과 머신러닝 모델을 손쉽게 구축하고 학습시킬 수 있는 도구입니다. 딥러닝 모델 중 하나인 인공신경망도 TensorFlow를 활용하면 구현과 학습 과정이 굉장히 간단해집니다. TensorFlow를 활용해서 앞서 구현한 인공신경망과 동일한 구조의 모델을 구현해보겠습니다.</p>
+
+<p>동일한 데이터셋(<code class="language-plaintext highlighter-rouge">df</code>)에서 독립변수와 종속변수를 분리하는 첫번째 과정은 동일하게 진행됩니다. 대신 데이터 정규화 과정에서는 또 다른 라이브러리, Scikit-learn(<code class="language-plaintext highlighter-rouge">sklearn</code>)을 사용했습니다. Scikit-learn은 데이터 전처리, 모델 학습, 평가 등 다양한 머신러닝 작업을 수행하는 파이썬 라이브러리입니다. 라이브러리를 사용하면 정규화를 위한 수식을 직접 구현하지 않고 해당 기능을 수행하는 모듈을 불러와 데이터 정규화와 같이 원하는 과정을 간단히 구현할 수 있죠.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+<span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="n">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">from</span> <span class="n">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+
+<span class="c1"># 독립변수(X)와 종속변수(y) 분리
+</span><span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="sh">"</span><span class="s">absences</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">night_study</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">club_activity</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">essay_length</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">exam_score</span><span class="sh">"</span><span class="p">]].</span><span class="n">values</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="sh">"</span><span class="s">admission</span><span class="sh">"</span><span class="p">].</span><span class="n">values</span><span class="p">.</span><span class="nf">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># 데이터 정규화
+</span><span class="n">scaler</span> <span class="o">=</span> <span class="nc">StandardScaler</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">scaler</span><span class="p">.</span><span class="nf">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>이제 데이터를 학습할 인공 신경망 모델을 구현해보겠습니다. 이전 과정(TensorFlow 없이 인공신경망을 구현)에서는 은닉층과 출력층의 가중치와 편향을 초기화하고, 순전파 함수와 활성화 함수 등을 정의함으로써 인공신경망을 구현했습니다. TensorFlow를 사용하면 인공신경망 모델을 하나의 객체로 구현할 수 있습니다. TensorFlow로 구현한 이번 인공신경망 객체 <code class="language-plaintext highlighter-rouge">model</code>은 이전 과정에서의 모델과 동일하게 다음과 같은 구조로 되어있습니다:</p>
+
+<ul>
+  <li>3개의 노드를 가진 하나의 은닉층</li>
+  <li>활성화 함수: 은닉층 - ReLU, 출력층 - Sigmod</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># TensorFlow 모델 정의
+</span><span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="nc">Sequential</span><span class="p">([</span>
+    <span class="c1"># 입력층 -&gt; 은닉층 (5 -&gt; 3), 활성화 함수: ReLU
+</span>    <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="nc">Dense</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="sh">'</span><span class="s">relu</span><span class="sh">'</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,)),</span>
+    <span class="c1"># 출력층 (3 -&gt; 1), 활성화 함수: Sigmoid
+</span>    <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">layers</span><span class="p">.</span><span class="nc">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="sh">'</span><span class="s">sigmoid</span><span class="sh">'</span><span class="p">)</span>
+<span class="p">])</span>
+</code></pre></div></div>
+
+<p>가중치와 편향값을 임의의 값으로 직접 초기화했던 이전 과정과 달리, TensorFlow를 사용하면 가중치와 편향은 각 층의 초기화 전략에 따라 초기화됩니다. 각 층의 특성에 맞게 효율적으로 초기화되도록 기본적으로 설정되어 있는거죠. 원한다면 <code class="language-plaintext highlighter-rouge">tf.keras.initializers</code>를 사용해서 초기화 방법을 지정할 수도 있습니다.</p>
+
+<p>모델을 정의하고 나면, 학습률과 손실함수를 지정해 모델을 컴파일합니다. 이전 과정과 동일하게 학습률로는 0.01, 손실함수로는 Binary Cross-Entropy를 사용했습니다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 모델 컴파일
+</span><span class="n">model</span><span class="p">.</span><span class="nf">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">optimizers</span><span class="p">.</span><span class="nc">SGD</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">),</span>  <span class="c1"># 학습률 0.01로 설정
+</span>              <span class="n">loss</span><span class="o">=</span><span class="sh">'</span><span class="s">binary_crossentropy</span><span class="sh">'</span><span class="p">)</span>  <span class="c1"># 이진 분류를 위한 손실 함수
+</span></code></pre></div></div>
+
+<p>모델에 대한 설정을 마쳤으니, 미리 준비해둔 데이터(<code class="language-plaintext highlighter-rouge">X</code>와 <code class="language-plaintext highlighter-rouge">y</code>)를 전달해 학습을 진행하겠습니다. <code class="language-plaintext highlighter-rouge">model</code>객체에 <code class="language-plaintext highlighter-rouge">fit()</code>메소드를 적용합니다. 각 파라미터의 역할은 다음과 같습니다.</p>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">X</code>, <code class="language-plaintext highlighter-rouge">y</code>: 학습 데이터의 독립변수와 종속변수</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">epochs</code>: 반복 진행할 학습의 횟수</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">batch_size</code>: 모델이 한 번에 처리할 학습 데이터의 개수. 크기가 작아질수록 가중치 업데이트가 세밀해지지만 학습 속도가 느려짐</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">verbose</code>: 학습 중 출력되는 로그 메세지의 상세 수준</li>
+</ul>
+
+<p>아래는 모델 학습 코드를 실행한 뒤 출력되는 학습 과정의 로그 메세지입니다. 반복문으로 일련의 학습 과정을 반복했던 이전 과정과 달리 훨씬 간단해진 코드를 확인할 수 있습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 모델 학습
+</span><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="nf">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-2/tensorflow%20%EB%AA%A8%EB%8D%B8%20%ED%95%99%EC%8A%B5.png" alt="TensorFlow 모델 학습" width="400"></p>
+<p class="img_caption">TensorFlow 모델 학습</p>
+
+<p>이렇게 TensorFlow를 활용하면 학습에 필요한 함수들을 일일이 정의하거나, 반복 학습을 위해 복잡한 함수들을 반복문 안에 직접 나열할 필요가 없습니다. 인공신경망을 직접 구현하며 그 동작 원리를 하나하나 이해하는 과정도 물론 중요하지만, 실제 프로젝트에서 모델을 활용할 때는 TensorFlow와 같은 잘 설계된 라이브러리를 사용해 중간 과정을 단순화하는 것이 효율적입니다.</p>
+
+<h2 id="글을-마무리하며">글을 마무리하며..</h2>
+
+<p>이번 글에서는 인공신경망(ANN)의 학습 과정을 이해하고, 학생의 학교 생활 데이터를 활용해 대입 합격 여부를 예측하는 모델을 직접 구축하고 학습시켜 보았습니다. ANN은 단순한 구조와 강력한 학습 능력으로 다양한 문제를 해결할 수 있지만, 시계열 데이터나 순차적 정보 처리에는 한계가 있습니다. 이러한 문제를 해결하기 위해 등장한 것이 순환 신경망(RNN)입니다. 또한 이미지나 영상 처리와 같이 공간적 관계를 파악해야 하는 문제에서는 합성곱 신경망(CNN)이 주로 사용됩니다. CNN은 이미지의 특징을 효과적으로 추출하고 학습할 수 있는 구조를 가지고 있어, 컴퓨터 비전과 같은 분야에서 큰 혁신을 가져왔습니다. 다음 글에서는 RNN의 기본 개념과 이를 개선한 LSTM 및 GRU를 활용한 시계열 문제 해결 방법을 다루고, CNN과 RNN의 차별성과 활용 사례를 비교해 깊이 있게 살펴보겠습니다.</p>
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/deep%20learning%20%EA%B8%B0%EC%B4%88/2024/12/09/ANN-1.html" title="ANN의 발전과 구조">ANN의 발전과 구조</a><a class="next" href="/deep%20learning%20%EA%B8%B0%EC%B4%88/2025/01/31/RNN.html" title="순환신경망(Recurrent Neural Network, RNN)">순환신경망(Recurrent Neural Network, RNN)</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li class="">
+          <a class="post-link" href="/deep%20learning%20%EA%B8%B0%EC%B4%88/2024/12/09/ANN-1.html" title="ANN의 발전과 구조">
+            ANN의 발전과 구조<span class="post-badges">
+  <span class="post-badge badge-top">TOP</span>
+  <span class="post-badge badge-new">NEW</span>
+</span>
+</a>
+        </li>
+<li class="">
+          <a class="post-link" href="/deep%20learning%20%EA%B8%B0%EC%B4%88/2025/01/31/RNN.html" title="순환신경망(Recurrent Neural Network, RNN)">
+            순환신경망(Recurrent Neural Network, RNN)<span class="post-badges">
+  <span class="post-badge badge-top">TOP</span>
+  <span class="post-badge badge-new">NEW</span>
+</span>
+</a>
+        </li>
+<li class="">
+          <a class="post-link" href="/deep%20learning%20%EA%B8%B0%EC%B4%88/2024/12/09/ANN-2.html" title="ANN의 학습">
+            ANN의 학습<span class="post-badges">
+  <span class="post-badge badge-top">TOP</span>
+  <span class="post-badge badge-new">NEW</span>
+</span>
+</a>
+        </li>
+</ul>
+    </div>
+<div class="post-comments">
+<div id="utterances-placeholder"></div>
+<script>
+  const utterancesThemeFromDataTheme = () => {
+    const dataTheme = document.documentElement.getAttribute('data-theme');
+    return `github-${dataTheme}`;
+  };
+
+  const setUtterancesTheme = () => {
+    const iframe = document.querySelector('.utterances-frame');
+    if (iframe) {
+      const message = {
+        type: 'set-theme',
+        theme: utterancesThemeFromDataTheme()
+      };
+      iframe.contentWindow.postMessage(message, 'https://utteranc.es');
+    }
+  }
+
+  // dynamic change
+  const observer = new MutationObserver((mutationsList, observer) => {
+    for (let mutation of mutationsList) {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+        setUtterancesTheme();
+      }
+    }
+  });
+  observer.observe(document.documentElement, { attributes: true, childList: false, subtree: false });
+
+  let utterancesScript = document.createElement('script');
+  utterancesScript.async = true;
+  utterancesScript.src = 'https://utteranc.es/client.js';
+  utterancesScript.crossOrigin = 'anonymous';
+  utterancesScript.setAttribute('issue-term', 'pathname');
+  utterancesScript.setAttribute('label', 'comments');
+  utterancesScript.setAttribute('repo', 'woka-inc/Woka-inc.github.io');
+  utterancesScript.setAttribute('theme', utterancesThemeFromDataTheme());
+
+  const placeholder = document.getElementById('utterances-placeholder');
+  placeholder.parentNode.replaceChild(utterancesScript, placeholder);
+</script>
+</div></section>
+</div>
+
+<script src="https://utteranc.es/client.js" repo="woka/Woka-inc.github.io" issue-term="pathname" label="comments" theme="github-light" crossorigin="anonymous" async>
+</script>
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>Copyright © 2024 Woka, All Rights Reserved</div>
+      <div>Powered by <a title="Jekyll is a simple, blog-aware, static site
+      generator." href="https://jekyllrb.com/">Jekyll</a> &amp; <a title="Yat, yet
+      another theme." href="https://github.com/jeffreytse/jekyll-theme-yat">Yat Theme</a>.</div>
+      <!-- <div class="footer-col rss-subscribe">Subscribe <a href="/feed.xml">via RSS</a></div> -->
+    </div>
+  </div>
+</footer>
+</body>
+</html>

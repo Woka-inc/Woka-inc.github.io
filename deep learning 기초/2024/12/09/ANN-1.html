@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ANN의 발전과 구조 | Woka 기술 블로그</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="ANN의 발전과 구조">
+<meta name="author" content="yunha">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="앨런 튜링의 논문, &lt;Computer Machinery and Intelligence&gt;의 일부">
+<meta property="og:description" content="앨런 튜링의 논문, &lt;Computer Machinery and Intelligence&gt;의 일부">
+<link rel="canonical" href="https://woka-inc.github.io/deep%20learning%20%EA%B8%B0%EC%B4%88/2024/12/09/ANN-1.html">
+<meta property="og:url" content="https://woka-inc.github.io/deep%20learning%20%EA%B8%B0%EC%B4%88/2024/12/09/ANN-1.html">
+<meta property="og:site_name" content="Woka 기술 블로그">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2024-12-09T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="ANN의 발전과 구조">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"yunha"},"dateModified":"2024-12-09T00:00:00+00:00","datePublished":"2024-12-09T00:00:00+00:00","description":"앨런 튜링의 논문, &lt;Computer Machinery and Intelligence&gt;의 일부","headline":"ANN의 발전과 구조","mainEntityOfPage":{"@type":"WebPage","@id":"https://woka-inc.github.io/deep%20learning%20%EA%B8%B0%EC%B4%88/2024/12/09/ANN-1.html"},"url":"https://woka-inc.github.io/deep%20learning%20%EA%B8%B0%EC%B4%88/2024/12/09/ANN-1.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="icon" href="/assets/images/favicon.ico">
+  <link rel="canonical" href="https://Woka-inc.github.io">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <script src="/assets/js/main.js"></script><link type="application/atom+xml" rel="alternate" href="https://woka-inc.github.io/feed.xml" title="Woka 기술 블로그">
+<!-- Google tag (gtag.js) -->
+<script>
+  function initGoogleAnalytics() {
+    var doNotTrack = (window.doNotTrack === "1" || navigator.doNotTrack === "1" ||
+      navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1");
+    var enableDNT = "true" == "true";
+
+    if (!enableDNT || !doNotTrack) {
+      var measurementId = 'G-L5T1FMJC6R';
+
+      (function(src) {
+        var tag = document.createElement('script');
+        tag.src = src;
+        tag.async = true;
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      })('https://www.googletagmanager.com/gtag/js?id=' + measurementId);
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', measurementId);
+    }
+  }
+  window.addEventListener("load", initGoogleAnalytics);
+</script>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js" async></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #ff4e00;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+<script src="//cdnjs.cloudflare.com/ajax/libs/photoswipe/5.3.7/umd/photoswipe-lightbox.umd.min.js" async></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/photoswipe/5.3.7/umd/photoswipe.umd.min.js" async></script>
+<link href="//cdnjs.cloudflare.com/ajax/libs/photoswipe/5.3.7/photoswipe.min.css" rel="stylesheet">
+<style>
+  .pswp .pswp__container .pswp__img {
+    background-color: white;
+  }
+</style>
+
+<script>
+  function initPhotoSwipe() {
+    let customOptions = {};
+
+    try {
+      const data = ``.replaceAll("=>", ":");
+      customOptions = JSON.parse(data);
+    } catch (e) {
+      console.info("Invalid custom photo previewer options! " + e.message);
+    }
+
+    // Define object and gallery options
+    const options = Object.assign(
+      {
+        gallery: "section.main",
+        children: "a.photo-swipe",
+        photo_scale: 2,
+        // dynamic import is not supported in UMD version
+        pswpModule: PhotoSwipe,
+      },
+      customOptions
+    );
+
+    const galleryEl = document.querySelector(options.gallery);
+    if (!galleryEl) {
+      return;
+    }
+
+    const imgEls = [];
+    const els = galleryEl.querySelectorAll("img:not(.emoji)");
+    els.forEach((el) => {
+      if (el.src.trim() == "") {
+        return;
+      }
+      if (!imgEls.includes(el)) {
+        imgEls.push(el);
+      }
+    });
+
+    if (imgEls.length === 0) {
+      return;
+    }
+
+    imgEls.forEach((imgEl) => {
+      imgEl.outerHTML = `
+      <a class="photo-swipe"
+        href="${imgEl.src}"
+        data-pswp-width="${
+          Math.max(imgEl.naturalWidth, imgEl.width) * options.photo_scale
+        }"
+        data-pswp-height="${
+          Math.max(imgEl.naturalHeight, imgEl.height) * options.photo_scale
+        }"
+        data-pswp-caption="${imgEl.getAttribute("caption") || imgEl.alt}"
+        target="_blank">
+        ${imgEl.outerHTML}
+      </a>`;
+    });
+
+    // Initialize PhotoSwipe 5
+    var lightbox = new PhotoSwipeLightbox(options);
+
+    lightbox.init();
+  }
+
+  window.addEventListener("load", initPhotoSwipe);
+</script>
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L5T1FMJC6R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L5T1FMJC6R');
+</script>
+
+<!-- MathJax -->
+<script>MathJax={"tex":{"inlineMath":[["$","$"],["\\(","\\)"]],"displayMath":[["$$","$$"],["\\[","\\]"]]},"svg":{"fontCache":"global"}}</script><script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>MathJax={"tex":{"inlineMath":[["$","$"],["\\(","\\)"]],"displayMath":[["$$","$$"],["\\[","\\]"]]},"svg":{"fontCache":"global"}}</script><script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header " role="banner">
+
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/">
+  <img class="site-favicon" title="Woka 기술 블로그" src="/assets/images/favicon.ico" onerror="this.style.display='none'">
+  Woka 기술 블로그
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/about.html">ABOUT</a><a class="page-link" href="/archives.html">ARCHIVES</a><a class="page-link" href="/categories.html">CATEGORIES</a><a class="page-link" href="/tags.html">TAGS</a>
+
+
+
+
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('auto' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<div id="click-to-top" class="click-to-top">
+  <i class="fa fa-arrow-up"></i>
+</div>
+<script>
+  (function () {
+    const clickToTop = document.getElementById('click-to-top');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        clickToTop.classList.add('show')
+      }else {
+        clickToTop.classList.remove('show')
+      }
+    });
+    clickToTop.addEventListener('click', () => {
+      window.smoothScrollTo(0);
+    });
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">ANN의 발전과 구조</h1>
+  <h2 class="post-subtitle"></h2>
+
+  <div class="post-meta">
+    <time class="dt-published" datetime="2024-12-09T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> Dec 09, 2024
+    </time><span class="post-author left-vsplit"><i class="fa fa-pencil"></i><a href="https://github.com/NaA-hwang" style="color:#777777">yunha</a></span>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 8 mins</span>
+  </div>
+<div class="post-tags">
+<a class="post-tag" href="/tags.html#deep-learning">#deep-learning</a><a class="post-tag" href="/tags.html#ANN">#ANN</a><a class="post-tag" href="/tags.html#%EC%9D%B8%EA%B3%B5%EC%8B%A0%EA%B2%BD%EB%A7%9D">#인공신경망</a><a class="post-tag" href="/tags.html#%ED%8D%BC%EC%85%89%ED%8A%B8%EB%A1%A0">#퍼셉트론</a>
+</div></header>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+
+      <p><img src="/assets/images/posts/2024-12-09-ANN-1/%EC%95%A8%EB%9F%B0%ED%8A%9C%EB%A7%81-can-machines-think.png" alt="앨런 튜링 - Can machines think?"></p>
+<p class="img_caption">앨런 튜링의 논문, &lt;<em>Computer Machinery and Intelligence</em>&gt;의 일부</p>
+
+<p>인간은 오랜 세월 동안 기계가 인간처럼 사고할 수 있을지 호기심을 가져왔습니다. 1950년, 엘런 튜링(Alan Turing)은 자신의 논문 &lt;<em>Computer Machinery and Intelligence</em>&gt;에서 “Can machines think?”라는 질문을 던지며, 기계의 지능에 대한 논의를 본격적으로 시작했습니다.</p>
+
+<p>그는 이 질문에 답하기 위해 인간과 기계의 대화를 통해 기계의 지능을 평가하는 튜링 테스트를 제안했는데, 이러한 호기심과 도전은 인간의 지능을 모방하고 이를 넘어서는 시스템을 설계하기 위한 다양한 시도로 이어졌습니다.</p>
+
+<p>특히 <strong>인공신경망(Artificial Neural Network, ANN)</strong>은 생물학적 뉴런의 작동 방식을 본뜬 알고리즘으로, 기계가 데이터를 학습하고 패턴을 인식하는 방식을 혁신적으로 변화시켰습니다. ANN의 발전은 초기의 단순한 뉴런 모델에서 시작해 오늘날의 딥러닝으로 이어지며, 기계 지능의 가능성을 증명하는 데 큰 역할을 해왔습니다. 오늘은 이러한 신경망의 역사를 통해 인공신경망이 어떻게 발전해 왔는지 살펴보고자 합니다.</p>
+
+<h2 id="인간의-뉴런을-기계적으로-구현한-첫-모델-m-p-뉴런">인간의 뉴런을 기계적으로 구현한 첫 모델, M-P 뉴런</h2>
+
+<p>인간의 지능을 모방하기 위한 시도는, 인간의 생물학적인 뉴런을 모방한 논리적 모델로부터 시작했습니다. 1943년, 워렌 맥컬록(Warren McCulloch)과 월터 피츠(Walter Pitts)는 &lt;<em>A Logical Calculus of Ideas Immanent in Nervous Activity</em>&gt;라는 논문을 발표하고, 뉴런의 동작을 이진 논리로 설명하는 M-P 뉴런을 소개했습니다.</p>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-1/%EC%83%9D%EB%AC%BC%ED%95%99%EC%A0%81-%EB%89%B4%EB%9F%B0.png" alt="생물학적 뉴런의 구조" width="400"></p>
+<p class="img_caption">생물학적 뉴런의 구조
+    <a class="img_ref" href="https://namu.wiki/w/%EB%89%B4%EB%9F%B0">(출처)</a>    
+</p>
+
+<p>인간의 뇌는 수백억 개의 뉴런으로 이루어져 있고, 각 뉴런은 신호를 처리한 뒤 다른 뉴런으로 신호를 전달합니다. 뉴런의 수상돌기에서 신호를 받아들이면, 신경세포체에서 받은 신호를 종합하고 처리하죠. 계산 결과가 특정 임곗값을 초과하면 축삭 말단 부근의 시냅스를 통해 다음 뉴런으로 신호가 전달되며, 뇌 전체에서 이 과정을 반복해 정보를 처리합니다.</p>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-1/M-P-%EB%89%B4%EB%9F%B0.png" alt="M-P 뉴런"></p>
+<p class="img_caption">M-P 뉴런
+    <a class="img_ref" href="https://medium.com/@siddharthshah2601/mcculloch-pitts-neuron-a-computational-model-of-biological-neuron-ce57239a951e">(출처)</a>
+</p>
+
+<p>앞서 살펴본 생물학적인 뉴런의 동작을 단순화한 수학적 모델인 M-P 뉴런은 위와 같이 그릴 수 있습니다. 인간의 뉴런이 수상돌기에서 여러 입력 신호를 받는 것처럼, M-P 뉴런에도 2진 값을 가진 여러 개의 입력값($x_1$, $x_2$, …, $x_m$)이 전달됩니다. 그런 다음, 신경세포체에서 신호를 종합하고 다음 뉴런으로의 신호 전달 여부를 결정할 때 임계값이 필요했듯이, M-P 뉴런에서도 입력값의 합이 특정 임계값을 초과하면 뉴런이 활성화되어 1이, 그렇지 않으면 뉴런이 비활성화 되어 0이 출력됩니다. 임계값을 조정함으로써 기본적인 논리 회로(AND, OR, NOT)를 구현할 수 있고, 여러 개의 뉴런을 계층적으로 결합함으로써 조금 더 복잡한 계산도 가능해집니다.</p>
+
+<p>이어 1949년, 캐나다의 심리학자 도널드 올딩 헵(Donald Olding Hebb)은 ‘헵의 이론(Hebbian theory)’을 발표하며 동시에 활성화되는 뉴런들은 함께 연결되고 함께 강화한다고 제안했습니다. 활동 중 함께 발화(활성화)하는 뉴런들은 강해진다는 생물학적 법칙에서 출발한 헵의 이론은 이후에 가중치를 활용한 신경망 학습 알고리즘의 기반이 됩니다.</p>
+
+<h2 id="인공지능의-본격적인-등장-퍼셉트론">인공지능의 본격적인 등장, 퍼셉트론</h2>
+
+<p>인공지능의 선구자로 불리는 미국의 전산학자 존 매카시(John McCarthy)는 1956년, 다트머스 대학 학회(Dartmouth Conference)를 개최하고 ‘인공지능’이라는 용어를 처음으로 사용했습니다. 인공지능(Artificial Intelligence, AI)을 ‘고도의 지능을 가진 컴퓨터 디바이스를 만들기 위한 과학과 공학’으로 정의했는데, 이때를 시작으로 관련 연구들은 ‘인공지능’이라는 이름을 내걸고 더욱 활발해졌습니다. 머지않아 1958년, 최초의 인공 신경망인 퍼셉트론(Perceptron)이 등장합니다.</p>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-1/perceptrons.png" alt="퍼셉트론"></p>
+<p class="img_caption">퍼셉트론
+    <a class="img_ref" href="https://pub.aimind.so/perceptron-101-the-building-blocks-of-a-neural-network-496f6b9b3826">(출처)</a>
+</p>
+
+<p>미국의 심리학자 프랑크 로젠블랫(Frank Rosenblatt)은 맥컬록-피츠의 모델과 헵의 이론에서 영감을 얻어 가중치와 학습의 개념을 추가한 퍼셉트론을 개발했습니다. 입력값마다 각각 입력의 중요도를 나타내는 가중치를 곱한 후 모두 합해 활성화 함수에 전달합니다. 활성화 함수에서 출력되는 결과를 보고 앞서 곱해진 가중치(weights)를 조정해 출력된 예측값과 정답의 오차를 줄이는 학습 알고리즘이 포함된 것이죠.</p>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-1/%EA%B3%84%EB%8B%A8%ED%95%A8%EC%88%98.png" alt="계단 함수" width="400"></p>
+<p class="img_caption">계단 함수
+	<a class="img_ref" href="https://pub.aimind.so/perceptron-101-the-building-blocks-of-a-neural-network-496f6b9b3826">(출처)</a>
+</p>
+
+<p>초기 퍼셉트론에서 사용된 활성화 함수는 위 그래프처럼 임곗값(threshold)을 기준으로 출력이 0 혹은 1로 바뀌는 계단 함수(step function)였습니다. 활성화 함수는 이처럼 가중치가 반영된 입력값의 총합이 뉴런의 활성화를 일으키는지를 결정하는 역할을 합니다. 현대에 들어서는 더 다양한 활성화 함수들이 있는데, 이 부분은 뒤에서 인공신경망의 학습을 다루면서 더 살펴보겠습니다.</p>
+
+<h2 id="퍼셉트론이-해결하지-못한-문제-xor">퍼셉트론이 해결하지 못한 문제, XOR</h2>
+
+<p>퍼셉트론이 등장하면서 인공지능에 대한 연구는 부흥기를 맞이했지만, 그 기간은 그리 길게 이어지지 못했습니다. 1969년, 미국의 컴퓨터 과학자 마빈 리 민스키(Marvin Lee Minsky)가 저서 &lt;<em>Perceptrons</em>&gt;에서 퍼셉트론은 XOR 문제와 같은 비선형 문제를 해결할 수 없다는 한계를 지적했기 때문입니다.</p>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-1/ANN-diagrams_%ED%8D%BC%EC%85%89%ED%8A%B8%EB%A1%A0%EC%9D%98%20%EC%B8%B5.png" alt="퍼셉트론의 층" width="500"></p>
+<p class="img_caption">퍼셉트론의 층</p>
+
+<p>초기의 퍼셉트론은 값을 입력받는 입력층과, 출력값을 결정하는 출력층까지 총 두 단계로만 이루어진 단층 퍼셉트론이었습니다. 이러한 단층 구조는 입력값을 선형 결합해서 단일한 출력만을 낼 수 있기 때문에, 비선형 경계를 표현하는 데에 한계가 있습니다.</p>
+
+<p>대표적인 비선형 문제 중 하나인 XOR 회로를 그림으로 나타내면 아래와 같습니다.</p>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-1/%EB%85%BC%EB%A6%AC%ED%9A%8C%EB%A1%9C.png" alt="논리회로"></p>
+<p class="img_caption">논리 회로
+    <a class="img_ref" href="https://pyimagesearch.com/2021/05/06/implementing-the-perceptron-neural-network-with-python/">(출처)</a>
+</p>
+
+<p>다른 논리 회로인 AND 회로와 OR 회로는 선형적인 경계로 데이터를 분리할 수 있지만, XOR 회로에서는 데이터를 표현할 하나의 선형 경계를 그릴 수 없습니다. 단층 구조라서 선형 경계만을 그릴 수 있는 퍼셉트론의 한계가 여기서 나타난 것이죠. 이후 인공 신경망 연구에는 오랜 침체기가 찾아왔습니다.</p>
+
+<h2 id="다층-신경망과-역전파-알고리즘">다층 신경망과 역전파 알고리즘</h2>
+
+<p>퍼셉트론이 단층 신경망이라서 위와 같은 문제를 갖는 것이라면, 여러 층을 갖는 퍼셉트론은 이 문제를 해결할 수 있을까요?</p>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-1/ANN-diagrams_%EB%8B%A4%EC%B8%B5%EC%8B%A0%EA%B2%BD%EB%A7%9D.png" alt="다층신경망"></p>
+<p class="img_caption">다층신경망</p>
+
+<p>다층 신경망은 단층 신경망에 하나 이상의 은닉층이 추가된 인공 신경망입니다. 은닉층이 2개 이상이면 심층 신경망(Deep Neural Network, DNN)이라고도 합니다. 각 층은 그림에서 동그라미로 표현된 노드로 구성되어 있습니다. 여기서 노드(node)는 앞서 계속 다뤄온 인공 뉴런을 의미합니다. 앞으로 인공 신경망을 구성하고 있는 인공 뉴런을 노드라고 표기하겠습니다. 입력층의 노드에는 입력 데이터가 들어있지만, 나머지 층의 노드는 각자 정해진 역할을 수행합니다. 그 역할의 내용은 다음과 같습니다.</p>
+
+<ul>
+  <li>
+<strong>입력층 (Input Layer)</strong>: 입력 데이터의 전달</li>
+  <li>
+<strong>은닉층 (Hidden Layers)</strong>:
+    <ul>
+      <li>입력층에서 입력 데이터를 전달받거나 직전 은닉층의 계산 결과를 전달받음</li>
+      <li>전달받은 값에 각각 가중치를 곱해 합산하고, 활성화 함수를 통해 다음 노드에 전달할 값 결정</li>
+    </ul>
+  </li>
+  <li>
+<strong>출력층 (Output Layer)</strong>: 신경망의 최종 출력 계산</li>
+</ul>
+
+<p>오랜 시간 동안 많은 연구자들이 노력했지만, 다층 신경망을 구현하는 것은 어려웠습니다. 은닉층에서 도출되는 각 노드의 출력값에는 오차를 측정할 정답이 없어, 은닉층의 가중치를 조정할 기준이 없었기 때문입니다. 그러나 1986년, 영국의 컴퓨터 과학자 제프리 힌튼(Geoffrey Hinton)이 다른 연구자들과 함께 다층 신경망을 학습시킬 수 있는 오류 역전파 알고리즘을 고안해 냈습니다.</p>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-1/ANN-diagrams_%EC%98%A4%EB%A5%98%20%EC%97%AD%EC%A0%84%ED%8C%8C%20%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98.png" alt="오류 역전파 알고리즘"></p>
+<p class="img_caption">오류 역전파 알고리즘</p>
+
+<p>정답이 있는 출력층에서 오차를 계산해 낼 수 있고, 이 오차(오류)를 출력층에서 입력층 방향으로 역으로 전파시키면서 은닉층의 가중치들을 재조정할 수 있게 된 것입니다. (역전파 알고리즘에 대해서는 이후 <a href="https://woka-inc.github.io/deep%20learning%20%EA%B8%B0%EC%B4%88/2024/12/09/ANN-2.html">ANN의 학습</a>에서 더 자세히 알아보겠습니다.) 오류 역전파 알고리즘으로 다층 신경망을 구현해 내면서, 이후에는 순환 신경망(RNN)과 합성곱 신경망(CNN)과 같은 구조들이 등장하여 시계열 데이터와 이미지 데이터를 처리할 수 있게 되었습니다.</p>
+
+<h2 id="현대의-인공-신경망-은닉층에서의-동작">현대의 인공 신경망, 은닉층에서의 동작</h2>
+
+<p>다층 신경망은 현대 인공 신경망의 기본 구조로 자리 잡았습니다. 이 현대 인공 신경망의 중요한 구성 요소 중 하나인 은닉층에 대해 조금 더 자세히 알아보겠습니다. 은닉층의 각 노드에서는 다음의 과정들이 순서대로 진행됩니다.</p>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-1/ANN-diagrams_%EC%9D%80%EB%8B%89%EC%B8%B5%20%EB%8F%99%EC%9E%91.png" alt="은닉층 동작"></p>
+<p class="img_caption">은닉층 동작</p>
+
+<ol>
+  <li>입력 데이터와 가중치(Weights)의 곱 계산</li>
+  <li>계산한 곱과 편향(Bias)을 더함</li>
+  <li>활성화 함수(Activation Function) 적용 결과 출력</li>
+</ol>
+
+<p>하나씩 살펴보겠습니다.</p>
+
+<blockquote>
+  <p>1) 입력 데이터와 가중치(Weights)의 곱 계산</p>
+</blockquote>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-1/ANN-diagrams_%EC%9D%80%EB%8B%89%EC%B8%B5%20%EB%8F%99%EC%9E%91%201.png" alt="은닉층 동작 1"></p>
+<p class="img_caption">은닉층 동작 1</p>
+
+<p>노드로 입력 데이터들이 전달되면, 각 입력값에 맞는 가중치가 곱해집니다. 가중치는 각 입력값에 대한 중요도를 나타내는 숫자입니다. 따라서 입력값에 가중치를 곱함으로써 중요한 값은 비중을 키우고, 그렇지 않은 값은 비중을 줄일 수 있습니다.</p>
+
+<blockquote>
+  <p>2) 계산한 곱과 편향(Bias)을 더함</p>
+</blockquote>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-1/ANN-diagrams_%EC%9D%80%EB%8B%89%EC%B8%B5%20%EB%8F%99%EC%9E%91%202.png" alt="은닉층 동작 2"></p>
+<p class="img_caption">은닉층 동작 2</p>
+
+<p>앞서 계산한 곱에 편향을 더해, 활성화 함수에 전달할 값을 결정하는 선형 변환 식 ($z=w_1x_1+w_2x_2+…+w_mx_m+b$)을 완성합니다. 입력값과 가중치의 곱에 편향을 더함으로써, 입력값이 0일 때도 유의미한 출력을 만들어낼 수 있도록 값을 조정합니다.</p>
+
+<blockquote>
+  <p>3) 활성화 함수(Activation Function) 적용 결과 출력</p>
+</blockquote>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-1/ANN-diagrams_%EC%9D%80%EB%8B%89%EC%B8%B5%20%EB%8F%99%EC%9E%91%203.png" alt="은닉층 동작 3"></p>
+<p class="img_caption">은닉층 동작 3</p>
+
+<p>선형 변환된 값을 해당 노드의 출력값으로 변환하기 위해 활성화 함수를 사용합니다. 활성화 함수를 사용하는 주된 목적은 출력값에 비선형성을 추가하기 위함입니다. 선형 변환만을 사용한 신경망은 직선으로 데이터를 표현할 수 있는 경우에만 한정되어 있습니다. 선형 변환을 아무리 많이 결합해 봤자, 여러 층의 선형 변환은 결국 하나의 선형 모델과 동일한 결과를 내기 때문입니다. 하지만 복잡한 문제는 직선이 아닌, 보다 복잡한 모양의 경계(곡선, 면 등)가 필요한 경우가 많습니다. 활성화 함수는 이러한 비선형 경계를 만들 수 있도록 신경망에 비선형성을 도입합니다.</p>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-1/ANN-diagrams_%ED%99%9C%EC%84%B1%ED%99%94%20%ED%95%A8%EC%88%98%EC%9D%98%20%EB%B9%84%EC%84%A0%ED%98%95%EC%84%B1.png" alt="활성화 함수의 비선형성"></p>
+<p class="img_caption">활성화 함수의 비선형성</p>
+
+<p>대표적인 활성화 함수로는 시그모이드 함수가 있습니다.</p>
+
+<p><img src="/assets/images/posts/2024-12-09-ANN-1/%EC%8B%9C%EA%B7%B8%EB%AA%A8%EC%9D%B4%EB%93%9C%20%ED%95%A8%EC%88%98.png" alt="시그모이드 함수" width="500"></p>
+<p class="img_caption">시그모이드 함수
+    <a class="img_ref" href="https://towardsdatascience.com/derivative-of-the-sigmoid-function-536880cf918e">(출처)</a>
+</p>
+
+<p>시그모이드 함수는 실수 전체의 입력값에 대해 출력값이 0과 1 사이로 한정되어 있기 때문에, 특정 입력이 참인지 거짓인지를 분류하는 이진 분류(Binary Classification) 문제에서 사용됩니다. 시그모이드 함수의 출력값이 참 혹은 거짓 중 하나의 클래스에 속할 확률로 이해할 수 있기 때문입니다.</p>
+
+<h2 id="마무리">마무리</h2>
+<p>인공신경망(ANN)의 발전 과정은 인간의 지능을 모방하려는 도전에서 시작해, 학습 가능성과 문제 해결 능력을 점차 확장해 온 여정이었습니다. M-P 뉴런과 퍼셉트론은 초기의 중요한 기반을 마련했지만, XOR 문제와 같은 비선형 문제를 해결하지 못하며 한계를 드러냈습니다. 이러한 한계를 극복하기 위해 다층 신경망과 오류 역전파 알고리즘이 도입되었고, 이는 현대 딥러닝 기술의 핵심이 되었습니다. 특히 은닉층은 신경망이 복잡한 패턴을 학습하고 강력한 성능을 발휘할 수 있는 중요한 역할을 합니다.</p>
+
+<p>이어지는 글에서는 ANN의 구조적 특징을 바탕으로 학습 과정과 그 원리에 대해 더 깊이 알아보겠습니다.</p>
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<span></span><a class="next" href="/deep%20learning%20%EA%B8%B0%EC%B4%88/2024/12/09/ANN-2.html" title="ANN의 학습">ANN의 학습</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li class="">
+          <a class="post-link" href="/deep%20learning%20%EA%B8%B0%EC%B4%88/2025/01/31/RNN.html" title="순환신경망(Recurrent Neural Network, RNN)">
+            순환신경망(Recurrent Neural Network, RNN)<span class="post-badges">
+  <span class="post-badge badge-top">TOP</span>
+  <span class="post-badge badge-new">NEW</span>
+</span>
+</a>
+        </li>
+<li class="">
+          <a class="post-link" href="/deep%20learning%20%EA%B8%B0%EC%B4%88/2024/12/09/ANN-2.html" title="ANN의 학습">
+            ANN의 학습<span class="post-badges">
+  <span class="post-badge badge-top">TOP</span>
+  <span class="post-badge badge-new">NEW</span>
+</span>
+</a>
+        </li>
+<li class="">
+          <a class="post-link" href="/deep%20learning%20%EA%B8%B0%EC%B4%88/2024/12/09/ANN-1.html" title="ANN의 발전과 구조">
+            ANN의 발전과 구조<span class="post-badges">
+  <span class="post-badge badge-top">TOP</span>
+  <span class="post-badge badge-new">NEW</span>
+</span>
+</a>
+        </li>
+</ul>
+    </div>
+<div class="post-comments">
+<div id="utterances-placeholder"></div>
+<script>
+  const utterancesThemeFromDataTheme = () => {
+    const dataTheme = document.documentElement.getAttribute('data-theme');
+    return `github-${dataTheme}`;
+  };
+
+  const setUtterancesTheme = () => {
+    const iframe = document.querySelector('.utterances-frame');
+    if (iframe) {
+      const message = {
+        type: 'set-theme',
+        theme: utterancesThemeFromDataTheme()
+      };
+      iframe.contentWindow.postMessage(message, 'https://utteranc.es');
+    }
+  }
+
+  // dynamic change
+  const observer = new MutationObserver((mutationsList, observer) => {
+    for (let mutation of mutationsList) {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+        setUtterancesTheme();
+      }
+    }
+  });
+  observer.observe(document.documentElement, { attributes: true, childList: false, subtree: false });
+
+  let utterancesScript = document.createElement('script');
+  utterancesScript.async = true;
+  utterancesScript.src = 'https://utteranc.es/client.js';
+  utterancesScript.crossOrigin = 'anonymous';
+  utterancesScript.setAttribute('issue-term', 'pathname');
+  utterancesScript.setAttribute('label', 'comments');
+  utterancesScript.setAttribute('repo', 'woka-inc/Woka-inc.github.io');
+  utterancesScript.setAttribute('theme', utterancesThemeFromDataTheme());
+
+  const placeholder = document.getElementById('utterances-placeholder');
+  placeholder.parentNode.replaceChild(utterancesScript, placeholder);
+</script>
+</div></section>
+</div>
+
+<script src="https://utteranc.es/client.js" repo="woka/Woka-inc.github.io" issue-term="pathname" label="comments" theme="github-light" crossorigin="anonymous" async>
+</script>
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>Copyright © 2024 Woka, All Rights Reserved</div>
+      <div>Powered by <a title="Jekyll is a simple, blog-aware, static site
+      generator." href="https://jekyllrb.com/">Jekyll</a> &amp; <a title="Yat, yet
+      another theme." href="https://github.com/jeffreytse/jekyll-theme-yat">Yat Theme</a>.</div>
+      <!-- <div class="footer-col rss-subscribe">Subscribe <a href="/feed.xml">via RSS</a></div> -->
+    </div>
+  </div>
+</footer>
+</body>
+</html>
