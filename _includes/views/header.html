@@ -35,10 +35,13 @@
           <div class="trigger">
             {%- for path in page_paths -%}
               {%- assign my_page = site.pages | where: "path", path | first -%}
-              {%- if my_page.title -%}
+              {%- if my_page.title and my_page.title != 'About' -%}
               <a class="page-link" href="{{ my_page.url | relative_url }}">{{ my_page.title | upcase | escape }}</a>
               {%- endif -%}
             {%- endfor -%}
+
+            <!-- ABOUT 링크 - Woka 회사 소개 페이지로 연결 -->
+            <a class="page-link" href="http://woka.kr">ABOUT</a>
 
             {%- assign name = 'translate_langs' -%}
             {%- include functions.html func='get_value' -%}
