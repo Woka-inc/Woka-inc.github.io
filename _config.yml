@@ -46,9 +46,9 @@ description: >- # this means to ignore newlines until "baseurl:"
   생존을 위한 선택이 아닌 필수,
   DX를 넘어 AX로 가는 길
 
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://woka.kr/blog/" # the base hostname & protocol for your site, e.g. https://example.com
-favicon: "/assets/images/favicon.ico" # the favicon for your site
+baseurl: "/blog" # the subpath of your site, e.g. /blog
+url: "http://woka.kr" # the base hostname & protocol for your site, e.g. https://example.com
+favicon: "./assets/images/favicon.ico" # the favicon for your site
 
 # Yat date format
 # refer to https://shopify.github.io/liquid/filters/date/ if you want to customize this
