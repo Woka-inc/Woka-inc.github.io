@@ -44,6 +44,7 @@
   <div class="post-excerpt">
     {%- if post_image and post_image != 'NO_EXCERPT_IMAGE' -%}
     <a  class="post-image" href="{{ post_url }}" style="flex: 0 1 {{ image_width }}">
+      {{ post_image }}
       <div style="background-image: url({{ post_image | relative_url }}); height: {{ image_height }}"></div>
     </a>
     {%- endif -%}
